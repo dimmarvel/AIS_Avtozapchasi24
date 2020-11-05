@@ -71,6 +71,12 @@
     <Compile Include="MainMenu.Designer.cs">
       <DependentUpon>MainMenu.cs</DependentUpon>
     </Compile>
+    <Compile Include="Postavshiki.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Postavshiki.Designer.cs">
+      <DependentUpon>Postavshiki.cs</DependentUpon>
+    </Compile>
     <Compile Include="Products.cs" />
     <Compile Include="ProductsForm.cs">
       <SubType>Form</SubType>
@@ -106,6 +112,9 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
     <EmbeddedResource Include="MainMenu.resx">
       <DependentUpon>MainMenu.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Postavshiki.resx">
+      <DependentUpon>Postavshiki.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="ProductsForm.resx">
       <DependentUpon>ProductsForm.cs</DependentUpon>

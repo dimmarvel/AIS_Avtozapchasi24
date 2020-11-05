@@ -57,6 +57,9 @@ namespace AvtoShop
         }
 
         private SqlConnection _sqlConnection = null;
+        private SqlCommand _sqlCommand = null;
+        private SqlDataAdapter _sqlDataAdapter = null;
+        private DataSet _dataSet = null;
         private List<BuyTable> _buyTable = null;
 
         public PurchaseForm()
@@ -123,16 +126,48 @@ namespace AvtoShop
 
         private void button1_Click(object sender, EventArgs e)
         {
-            string temp = "";
-            foreach (var it in _buyTable)
-            {
-                temp += it._zapchast + " - " +
-                            it._mark + " - " +
-                            it._izgotovitel + " - " +
-                            it._price_per_one + "\n";
-            }
-            MessageBox.Show(temp);
+            string sqlzapros = "UPDATE Products SET Количество = " + textBox1.Text +
+            "WHERE Запчасть = '" + comboBox1.Text +
+            "' AND Марка='" + comboBox3.Text +
+            "' AND Изготовитель = '" + comboBox2.Text + "';"; // ТУТА СДЕЛАЛ ЗАПРОС
+            //https://webformyself.com/sql-zapros-update/
+            _sqlCommand = new SqlCommand(sqlzapros, _sqlConnection);
+            _sqlDataAdapter = new SqlDataAdapter(_sqlCommand);
+            _dataSet = new DataSet();
 
+            if(CheckExistenceTable()) // существует ли на складе товар
+            {
+                
+            }
+            else
+            {
+                // добавить в таблицу product если не существует такой записи по данным из комбобоксов
+            }
+
+            _sqlDataAdapter.Fill(_dataSet);
+        }
+        private bool CheckExistenceTable()
+        {
+            string queryString =
+            "SELECT COUNT(*) FROM Products WHERE Запчасть = '" + comboBox1.Text + 
+            "' AND Марка='" + comboBox3.Text + 
+            "' AND Изготовитель = '" + comboBox2.Text + "';";
+            
+            SqlCommand command = new SqlCommand(queryString, _sqlConnection);
+            SqlDataReader reader = command.ExecuteReader();
+            try
+            {
+                if (reader.Read())
+                {
+                    return true;
+                }
+                else return false;
+            }
+            finally
+            {
+                // Always call Close when done reading.
+                reader.Close();
+            }
         }
         private void ReadDataToClass()
         {
@@ -204,6 +239,12 @@ namespace AvtoShop
             {
                 e.Handled = true;
             }
+        }
+
+        private void button2_Click(object sender, EventArgs e)
+        {
+            Postavshiki postavshiki = new Postavshiki();
+            postavshiki.Show();
         }
     }
 }
