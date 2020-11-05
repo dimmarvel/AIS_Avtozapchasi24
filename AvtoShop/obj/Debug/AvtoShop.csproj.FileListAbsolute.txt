@@ -1,0 +1,17 @@
+C:\Users\dimma\Desktop\AvtoShop\AvtoShop\bin\Debug\AvtoShop.exe.config
+C:\Users\dimma\Desktop\AvtoShop\AvtoShop\bin\Debug\AvtoShop.exe
+C:\Users\dimma\Desktop\AvtoShop\AvtoShop\bin\Debug\AvtoShop.pdb
+C:\Users\dimma\Desktop\AvtoShop\AvtoShop\obj\Debug\AvtoShop.csprojAssemblyReference.cache
+C:\Users\dimma\Desktop\AvtoShop\AvtoShop\obj\Debug\AvtoShop.StorageForm.resources
+C:\Users\dimma\Desktop\AvtoShop\AvtoShop\obj\Debug\AvtoShop.Properties.Resources.resources
+C:\Users\dimma\Desktop\AvtoShop\AvtoShop\obj\Debug\AvtoShop.csproj.GenerateResource.cache
+C:\Users\dimma\Desktop\AvtoShop\AvtoShop\obj\Debug\AvtoShop.csproj.CoreCompileInputs.cache
+C:\Users\dimma\Desktop\AvtoShop\AvtoShop\obj\Debug\AvtoShop.exe
+C:\Users\dimma\Desktop\AvtoShop\AvtoShop\obj\Debug\AvtoShop.pdb
+C:\Users\dimma\Desktop\AvtoShop\AvtoShop\obj\Debug\AvtoShop.MainMenu.resources
+C:\Users\dimma\Desktop\AvtoShop\AvtoShop\obj\Debug\AvtoShop.ProductsForm.resources
+C:\Users\dimma\Desktop\AvtoShop\AvtoShop\obj\Debug\AvtoShop.SalesForm.resources
+C:\Users\dimma\Desktop\AvtoShop\AvtoShop\obj\Debug\AvtoShop.SalesStatisticsForm.resources
+C:\Users\dimma\Desktop\AvtoShop\AvtoShop\bin\Debug\Database1.mdf
+C:\Users\dimma\Desktop\AvtoShop\AvtoShop\bin\Debug\Database1_log.ldf
+C:\Users\dimma\Desktop\AvtoShop\AvtoShop\obj\Debug\AvtoShop.PurchaseForm.resources
