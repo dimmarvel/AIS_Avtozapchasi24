@@ -38,7 +38,7 @@ namespace AvtoShop
     //        _zapchast =_zapchast.Distinct().ToList();
     //    }
     //}
-    
+
     public partial class PurchaseForm : Form
     {
         public class BuyTable
@@ -63,7 +63,7 @@ namespace AvtoShop
         {
             InitializeComponent();
         }
-        
+
         private void PurchaseForm_Load(object sender, EventArgs e)
         {
             _sqlConnection = new SqlConnection(@"Data Source=(LocalDB)\MSSQLLocalDB;AttachDbFilename=C:\Users\dimma\Desktop\AvtoShop\AvtoShop\Database1.mdf;Integrated Security=True");
@@ -84,7 +84,7 @@ namespace AvtoShop
                 comboBox2.Items.Add(it);
 
             SetZapchastComboBox(comboBox2.Text);
-            SetMarkComboBox(comboBox1.Text);
+            SetMarkComboBox(comboBox1.Text, comboBox2.Text);
         }
 
         private List<string> GetUniqIzgotovitel()
@@ -92,42 +92,44 @@ namespace AvtoShop
             List<string> temp = new List<string>();
             foreach (var it in _buyTable)
             {
-                if(temp.Contains(it._izgotovitel))
+                if (temp.Contains(it._izgotovitel))
                     continue;
                 temp.Add(it._izgotovitel);
             }
             return temp;
         }
+
         private void SetZapchastComboBox(string izgotovitel)
         {
             comboBox1.Items.Clear();
 
             foreach (var it in _buyTable)
-                if(izgotovitel == it._izgotovitel)
+                if (izgotovitel == it._izgotovitel)
                     if (!comboBox1.Items.Contains(it._zapchast))
                         comboBox1.Items.Add(it._zapchast);
             comboBox1.Text = comboBox1.Items[0].ToString();
         }
-        private void SetMarkComboBox(string zapchast)
+        private void SetMarkComboBox(string zapchast, string izgotovitel)
         {
             comboBox3.Items.Clear();
 
             foreach (var it in _buyTable)
-                if (zapchast == it._zapchast)
+                if (zapchast == it._zapchast && izgotovitel == it._izgotovitel)
                     if (!comboBox3.Items.Contains(it._mark))
                         comboBox3.Items.Add(it._mark);
             comboBox3.Text = comboBox3.Items[0].ToString();
+            RecalcPrice();
         }
 
         private void button1_Click(object sender, EventArgs e)
         {
             string temp = "";
-            foreach(var it in _buyTable)
-            { 
-               temp += it._zapchast + " - " +
-                           it._mark + " - " +
-                           it._izgotovitel + " - " +
-                           it._price_per_one + "\n";
+            foreach (var it in _buyTable)
+            {
+                temp += it._zapchast + " - " +
+                            it._mark + " - " +
+                            it._izgotovitel + " - " +
+                            it._price_per_one + "\n";
             }
             MessageBox.Show(temp);
 
@@ -149,7 +151,7 @@ namespace AvtoShop
 
         private void comboBox1_SelectedIndexChanged(object sender, EventArgs e)
         {
-            SetMarkComboBox(comboBox1.Text);
+            SetMarkComboBox(comboBox1.Text,comboBox2.Text);
         }
 
         private void comboBox3_SelectedIndexChanged(object sender, EventArgs e)
@@ -159,7 +161,49 @@ namespace AvtoShop
         private void comboBox2_SelectedIndexChanged(object sender, EventArgs e)
         {
             SetZapchastComboBox(comboBox2.Text);
-            SetMarkComboBox(comboBox1.Text);
+            SetMarkComboBox(comboBox1.Text, comboBox2.Text);
+        }
+
+        private void textBox1_TextChanged(object sender, EventArgs e)
+        {
+            if(int.Parse(textBox1.Text) < 100001)
+            {
+                RecalcPrice();
+            }else
+            {
+                MessageBox.Show("Слишком большое количество заказанных деталей.", "Error!", 
+                    MessageBoxButtons.OK, MessageBoxIcon.Error);
+                textBox1.Text = "1";
+            }
+        }
+
+        public void RecalcPrice()
+        {
+            label6.Text = "";
+            for (int i = 0; i < _buyTable.Count; i++) // find price
+            {
+                if(_buyTable[i]._izgotovitel == comboBox2.Text && 
+                   _buyTable[i]._zapchast == comboBox1.Text && 
+                   _buyTable[i]._mark == comboBox3.Text)
+                {
+                    if(textBox1.Text == "")
+                        label6.Text += "0$ (за 1 шт. = " +_buyTable[i]._price_per_one + "$)";
+                    else
+                        label6.Text += int.Parse(textBox1.Text) * _buyTable[i]._price_per_one + "$ (за 1 шт. = "
+                            + _buyTable[i]._price_per_one + "$)";
+                    break;
+                }
+            }
+
+        }
+        private void textBox1_KeyPress(object sender, KeyPressEventArgs e)
+        {
+            char number = e.KeyChar;
+
+            if (!Char.IsDigit(number))
+            {
+                e.Handled = true;
+            }
         }
     }
 }

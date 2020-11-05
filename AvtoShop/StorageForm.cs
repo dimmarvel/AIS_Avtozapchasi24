@@ -55,7 +55,6 @@ namespace AvtoShop
         {
             try
             {
-
                 // SELECT(выбрать все сущности из таблицы) остальное для управления по таблице
                 _sqlDataAdapter = new SqlDataAdapter("SELECT * FROM Products", _sqlConnection);
 
