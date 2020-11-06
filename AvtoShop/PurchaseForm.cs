@@ -115,6 +115,7 @@ namespace AvtoShop
                         comboBox1.Items.Add(it._zapchast);
             comboBox1.Text = comboBox1.Items[0].ToString();
         }
+
         private void SetMarkComboBox(string zapchast, string izgotovitel)
         {
             comboBox3.Items.Clear();
@@ -135,9 +136,19 @@ namespace AvtoShop
                     MessageBoxButtons.OK, MessageBoxIcon.Warning);
                 return;
             }
-            if (CheckExistenceTable()) // существует ли на складе товар
+            BuyTable changeTable = new BuyTable();
+            if (CheckExistenceTable(ref changeTable)) // существует ли на складе товар
             {
-                MessageBox.Show("А такое в таблице ЕСТЬ");
+                MessageBox.Show("А такое в таблице ЕСТЬ");   
+                
+                //_price_per_one здесь в роли количества если юзаем таблицу Products
+                string queryDB = "UPDATE Products SET Количество = '"+ (changeTable._price_per_one + int.Parse(textBox1.Text)) +
+                                "' WHERE Id = " + changeTable._id + ";";
+
+                _sqlCommand = new SqlCommand(queryDB, _sqlConnection);
+                _sqlCommand.ExecuteNonQuery();
+                MessageBox.Show("А такое в таблице ЕСТЬ - " + queryDB);
+
             }
             else
             {
@@ -151,23 +162,27 @@ namespace AvtoShop
                 _sqlCommand.Parameters.AddWithValue("izgotovitel", comboBox2.Text);
                 _sqlCommand.Parameters.AddWithValue("price", "0");
                 _sqlCommand.Parameters.AddWithValue("count", textBox1.Text);
+                
                 _sqlCommand.ExecuteNonQuery();
+
                 MessageBox.Show("Товар успешно куплен!\nТовара (" + comboBox2.Text + " " + comboBox1.Text + " " + comboBox3.Text +
-                    ") ещё небыло на складе. Пожалуйста, установите цену этому товару в разделе \"Товары\" по умолчанию цена 0$.");
+                    ") ещё небыло на складе. Пожалуйста, установите цену этому товару в разделе \"Товары\" по умолчанию цена 0$.",
+                    "Предупреждение!",MessageBoxButtons.OK, MessageBoxIcon.Warning);
                 // добавить в таблицу product если не существует такой записи по данным из комбобоксов
             }
 
         }
-        private bool CheckExistenceTable()
+        private bool CheckExistenceTable(ref BuyTable buyTable)
         {
             SqlCommand sqlCommand = new SqlCommand("SELECT * FROM Products", _sqlConnection);
             SqlDataReader sqlDataReader = sqlCommand.ExecuteReader();
             List<BuyTable> tempTable = new List<BuyTable>();
-            while (sqlDataReader.Read())
+
+            while (sqlDataReader.Read()) // Read products table to List<class>
             {
                 BuyTable bt = new BuyTable();
                 bt.Add_data((int)sqlDataReader[0], sqlDataReader[1].ToString(), sqlDataReader[2].ToString(),
-                                        sqlDataReader[4].ToString(), (int)sqlDataReader[5]);
+                                        sqlDataReader[4].ToString(), (int)sqlDataReader[6]);
                 tempTable.Add(bt);
             }
 
@@ -178,6 +193,7 @@ namespace AvtoShop
                     tempTable[i]._izgotovitel == comboBox2.Text)
                 {
                     sqlDataReader.Close();
+                    buyTable = tempTable[i];
                     return true;
                 }
             }
