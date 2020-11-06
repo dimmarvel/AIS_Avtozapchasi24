@@ -43,19 +43,22 @@ namespace AvtoShop
     {
         public class BuyTable
         {
+            public int _id;
             public string _zapchast;
             public string _mark;
             public string _izgotovitel;
             public int _price_per_one;
-            public void Add_data(string _zap, string _mar, string _izg, int _price)
+            public void Add_data(int id, string zap, string mark, string izg, int price)
             {
-                _zapchast = _zap;
-                _mark = _mar;
-                _izgotovitel = _izg;
-                _price_per_one = _price;
+                _id = id;
+                _zapchast = zap;
+                _mark = mark;
+                _izgotovitel = izg;
+                _price_per_one = price;
             }
         }
 
+        private SqlCommandBuilder _sqlBuilder = null;
         private SqlConnection _sqlConnection = null;
         private SqlCommand _sqlCommand = null;
         private SqlDataAdapter _sqlDataAdapter = null;
@@ -126,48 +129,61 @@ namespace AvtoShop
 
         private void button1_Click(object sender, EventArgs e)
         {
-            string sqlzapros = "UPDATE Products SET Количество = " + textBox1.Text +
-            "WHERE Запчасть = '" + comboBox1.Text +
-            "' AND Марка='" + comboBox3.Text +
-            "' AND Изготовитель = '" + comboBox2.Text + "';"; // ТУТА СДЕЛАЛ ЗАПРОС
-            //https://webformyself.com/sql-zapros-update/
-            _sqlCommand = new SqlCommand(sqlzapros, _sqlConnection);
-            _sqlDataAdapter = new SqlDataAdapter(_sqlCommand);
-            _dataSet = new DataSet();
-
-            if(CheckExistenceTable()) // существует ли на складе товар
+            if (textBox1.Text == "")
             {
-                
+                MessageBox.Show("Добавьте количество товара которое хотите купить.", "Предупреждение!",
+                    MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                return;
+            }
+            if (CheckExistenceTable()) // существует ли на складе товар
+            {
+                MessageBox.Show("А такое в таблице ЕСТЬ");
             }
             else
             {
+                string queryDB = "INSERT INTO[Products](Запчасть, Марка, Наличие, Изготовитель, Цена, Количество)" +
+                    "VALUES(@zapchast, @mark, @nalichie, @izgotovitel, @price, @count)";
+
+                _sqlCommand = new SqlCommand(queryDB, _sqlConnection);
+                _sqlCommand.Parameters.AddWithValue("zapchast", comboBox1.Text);
+                _sqlCommand.Parameters.AddWithValue("mark", comboBox3.Text);
+                _sqlCommand.Parameters.AddWithValue("nalichie", "True");
+                _sqlCommand.Parameters.AddWithValue("izgotovitel", comboBox2.Text);
+                _sqlCommand.Parameters.AddWithValue("price", "0");
+                _sqlCommand.Parameters.AddWithValue("count", textBox1.Text);
+                _sqlCommand.ExecuteNonQuery();
+                MessageBox.Show("Товар успешно куплен!\nТовара (" + comboBox2.Text + " " + comboBox1.Text + " " + comboBox3.Text +
+                    ") ещё небыло на складе. Пожалуйста, установите цену этому товару в разделе \"Товары\" по умолчанию цена 0$.");
                 // добавить в таблицу product если не существует такой записи по данным из комбобоксов
             }
 
-            _sqlDataAdapter.Fill(_dataSet);
         }
         private bool CheckExistenceTable()
         {
-            string queryString =
-            "SELECT COUNT(*) FROM Products WHERE Запчасть = '" + comboBox1.Text + 
-            "' AND Марка='" + comboBox3.Text + 
-            "' AND Изготовитель = '" + comboBox2.Text + "';";
-            
-            SqlCommand command = new SqlCommand(queryString, _sqlConnection);
-            SqlDataReader reader = command.ExecuteReader();
-            try
+            SqlCommand sqlCommand = new SqlCommand("SELECT * FROM Products", _sqlConnection);
+            SqlDataReader sqlDataReader = sqlCommand.ExecuteReader();
+            List<BuyTable> tempTable = new List<BuyTable>();
+            while (sqlDataReader.Read())
             {
-                if (reader.Read())
+                BuyTable bt = new BuyTable();
+                bt.Add_data((int)sqlDataReader[0], sqlDataReader[1].ToString(), sqlDataReader[2].ToString(),
+                                        sqlDataReader[4].ToString(), (int)sqlDataReader[5]);
+                tempTable.Add(bt);
+            }
+
+            for(int i = 0; i < tempTable.Count; i++)
+            {
+                if (tempTable[i]._zapchast == comboBox1.Text &&
+                    tempTable[i]._mark == comboBox3.Text &&
+                    tempTable[i]._izgotovitel == comboBox2.Text)
                 {
+                    sqlDataReader.Close();
                     return true;
                 }
-                else return false;
             }
-            finally
-            {
-                // Always call Close when done reading.
-                reader.Close();
-            }
+            sqlDataReader.Close();
+            return false;
+
         }
         private void ReadDataToClass()
         {
@@ -177,8 +193,9 @@ namespace AvtoShop
             while (sqlDataReader.Read())
             {
                 BuyTable bt = new BuyTable();
-                bt.Add_data(sqlDataReader[1].ToString(), sqlDataReader[2].ToString(),
-                                        sqlDataReader[3].ToString(), (int)sqlDataReader[4]);
+                bt.Add_data((int)sqlDataReader[0], sqlDataReader[1].ToString(), 
+                            sqlDataReader[2].ToString(), sqlDataReader[3].ToString(), 
+                            (int)sqlDataReader[4]);
                 _buyTable.Add(bt);
             }
             sqlDataReader.Close();
@@ -187,10 +204,6 @@ namespace AvtoShop
         private void comboBox1_SelectedIndexChanged(object sender, EventArgs e)
         {
             SetMarkComboBox(comboBox1.Text,comboBox2.Text);
-        }
-
-        private void comboBox3_SelectedIndexChanged(object sender, EventArgs e)
-        {
         }
 
         private void comboBox2_SelectedIndexChanged(object sender, EventArgs e)
@@ -245,6 +258,9 @@ namespace AvtoShop
         {
             Postavshiki postavshiki = new Postavshiki();
             postavshiki.Show();
+        }
+        private void comboBox3_SelectedIndexChanged(object sender, EventArgs e)
+        {
         }
     }
 }
