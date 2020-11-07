@@ -28,29 +28,31 @@
         /// </summary>
         private void InitializeComponent()
         {
-            this.button1 = new System.Windows.Forms.Button();
+            this.buyButton = new System.Windows.Forms.Button();
             this.label1 = new System.Windows.Forms.Label();
             this.label2 = new System.Windows.Forms.Label();
             this.label3 = new System.Windows.Forms.Label();
             this.label4 = new System.Windows.Forms.Label();
             this.label5 = new System.Windows.Forms.Label();
-            this.comboBox1 = new System.Windows.Forms.ComboBox();
-            this.comboBox2 = new System.Windows.Forms.ComboBox();
-            this.comboBox3 = new System.Windows.Forms.ComboBox();
-            this.textBox1 = new System.Windows.Forms.TextBox();
+            this.zapchastBox1 = new System.Windows.Forms.ComboBox();
+            this.izgotovitelBox2 = new System.Windows.Forms.ComboBox();
+            this.markBox3 = new System.Windows.Forms.ComboBox();
+            this.countTextBox1 = new System.Windows.Forms.TextBox();
+            this.priceLabel = new System.Windows.Forms.Label();
+            this.checkPostavshikButton = new System.Windows.Forms.Button();
             this.label6 = new System.Windows.Forms.Label();
-            this.button2 = new System.Windows.Forms.Button();
+            this.soldpriceTextBox = new System.Windows.Forms.TextBox();
             this.SuspendLayout();
             // 
-            // button1
+            // buyButton
             // 
-            this.button1.Location = new System.Drawing.Point(68, 197);
-            this.button1.Name = "button1";
-            this.button1.Size = new System.Drawing.Size(148, 52);
-            this.button1.TabIndex = 0;
-            this.button1.Text = "Купить";
-            this.button1.UseVisualStyleBackColor = true;
-            this.button1.Click += new System.EventHandler(this.button1_Click);
+            this.buyButton.Location = new System.Drawing.Point(59, 224);
+            this.buyButton.Name = "buyButton";
+            this.buyButton.Size = new System.Drawing.Size(148, 52);
+            this.buyButton.TabIndex = 0;
+            this.buyButton.Text = "Купить";
+            this.buyButton.UseVisualStyleBackColor = true;
+            this.buyButton.Click += new System.EventHandler(this.button1_Click);
             // 
             // label1
             // 
@@ -96,84 +98,105 @@
             // 
             this.label5.AutoSize = true;
             this.label5.Font = new System.Drawing.Font("Times New Roman", 11.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
-            this.label5.Location = new System.Drawing.Point(65, 151);
+            this.label5.Location = new System.Drawing.Point(65, 181);
             this.label5.Name = "label5";
             this.label5.Size = new System.Drawing.Size(43, 17);
             this.label5.TabIndex = 5;
             this.label5.Text = "Цена:";
             // 
-            // comboBox1
+            // zapchastBox1
             // 
-            this.comboBox1.FormattingEnabled = true;
-            this.comboBox1.Location = new System.Drawing.Point(191, 64);
-            this.comboBox1.Name = "comboBox1";
-            this.comboBox1.Size = new System.Drawing.Size(197, 21);
-            this.comboBox1.TabIndex = 6;
-            this.comboBox1.SelectedIndexChanged += new System.EventHandler(this.comboBox1_SelectedIndexChanged);
+            this.zapchastBox1.FormattingEnabled = true;
+            this.zapchastBox1.Location = new System.Drawing.Point(191, 64);
+            this.zapchastBox1.Name = "zapchastBox1";
+            this.zapchastBox1.Size = new System.Drawing.Size(197, 21);
+            this.zapchastBox1.TabIndex = 6;
+            this.zapchastBox1.SelectedIndexChanged += new System.EventHandler(this.comboBox1_SelectedIndexChanged);
             // 
-            // comboBox2
+            // izgotovitelBox2
             // 
-            this.comboBox2.FormattingEnabled = true;
-            this.comboBox2.Location = new System.Drawing.Point(191, 37);
-            this.comboBox2.Name = "comboBox2";
-            this.comboBox2.Size = new System.Drawing.Size(197, 21);
-            this.comboBox2.TabIndex = 7;
-            this.comboBox2.SelectedIndexChanged += new System.EventHandler(this.comboBox2_SelectedIndexChanged);
+            this.izgotovitelBox2.FormattingEnabled = true;
+            this.izgotovitelBox2.Location = new System.Drawing.Point(191, 37);
+            this.izgotovitelBox2.Name = "izgotovitelBox2";
+            this.izgotovitelBox2.Size = new System.Drawing.Size(197, 21);
+            this.izgotovitelBox2.TabIndex = 7;
+            this.izgotovitelBox2.SelectedIndexChanged += new System.EventHandler(this.comboBox2_SelectedIndexChanged);
             // 
-            // comboBox3
+            // markBox3
             // 
-            this.comboBox3.FormattingEnabled = true;
-            this.comboBox3.Location = new System.Drawing.Point(191, 91);
-            this.comboBox3.Name = "comboBox3";
-            this.comboBox3.Size = new System.Drawing.Size(197, 21);
-            this.comboBox3.TabIndex = 8;
-            this.comboBox3.SelectedIndexChanged += new System.EventHandler(this.comboBox3_SelectedIndexChanged);
+            this.markBox3.FormattingEnabled = true;
+            this.markBox3.Location = new System.Drawing.Point(191, 91);
+            this.markBox3.Name = "markBox3";
+            this.markBox3.Size = new System.Drawing.Size(197, 21);
+            this.markBox3.TabIndex = 8;
+            this.markBox3.SelectedIndexChanged += new System.EventHandler(this.comboBox3_SelectedIndexChanged);
             // 
-            // textBox1
+            // countTextBox1
             // 
-            this.textBox1.Location = new System.Drawing.Point(191, 118);
-            this.textBox1.Name = "textBox1";
-            this.textBox1.Size = new System.Drawing.Size(197, 20);
-            this.textBox1.TabIndex = 9;
-            this.textBox1.TextChanged += new System.EventHandler(this.textBox1_TextChanged);
-            this.textBox1.KeyPress += new System.Windows.Forms.KeyPressEventHandler(this.textBox1_KeyPress);
+            this.countTextBox1.Location = new System.Drawing.Point(191, 118);
+            this.countTextBox1.Name = "countTextBox1";
+            this.countTextBox1.Size = new System.Drawing.Size(197, 20);
+            this.countTextBox1.TabIndex = 9;
+            this.countTextBox1.TextChanged += new System.EventHandler(this.textBox1_TextChanged);
+            this.countTextBox1.KeyPress += new System.Windows.Forms.KeyPressEventHandler(this.textBox1_KeyPress);
+            // 
+            // priceLabel
+            // 
+            this.priceLabel.AutoSize = true;
+            this.priceLabel.Font = new System.Drawing.Font("Times New Roman", 11.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
+            this.priceLabel.Location = new System.Drawing.Point(188, 181);
+            this.priceLabel.Name = "priceLabel";
+            this.priceLabel.Size = new System.Drawing.Size(0, 17);
+            this.priceLabel.TabIndex = 10;
+            // 
+            // checkPostavshikButton
+            // 
+            this.checkPostavshikButton.Location = new System.Drawing.Point(230, 224);
+            this.checkPostavshikButton.Name = "checkPostavshikButton";
+            this.checkPostavshikButton.Size = new System.Drawing.Size(148, 52);
+            this.checkPostavshikButton.TabIndex = 11;
+            this.checkPostavshikButton.Text = "Посмотреть все товары поставщиков";
+            this.checkPostavshikButton.UseVisualStyleBackColor = true;
+            this.checkPostavshikButton.Click += new System.EventHandler(this.button2_Click);
             // 
             // label6
             // 
             this.label6.AutoSize = true;
             this.label6.Font = new System.Drawing.Font("Times New Roman", 11.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
-            this.label6.Location = new System.Drawing.Point(188, 151);
+            this.label6.Location = new System.Drawing.Point(65, 150);
             this.label6.Name = "label6";
-            this.label6.Size = new System.Drawing.Size(0, 17);
-            this.label6.TabIndex = 10;
+            this.label6.Size = new System.Drawing.Size(100, 17);
+            this.label6.TabIndex = 12;
+            this.label6.Text = "Цена продажи:";
+            this.label6.Click += new System.EventHandler(this.label6_Click);
             // 
-            // button2
+            // soldpriceTextBox
             // 
-            this.button2.Location = new System.Drawing.Point(240, 197);
-            this.button2.Name = "button2";
-            this.button2.Size = new System.Drawing.Size(148, 52);
-            this.button2.TabIndex = 11;
-            this.button2.Text = "Посмотреть все товары поставщиков";
-            this.button2.UseVisualStyleBackColor = true;
-            this.button2.Click += new System.EventHandler(this.button2_Click);
+            this.soldpriceTextBox.Location = new System.Drawing.Point(191, 147);
+            this.soldpriceTextBox.Name = "soldpriceTextBox";
+            this.soldpriceTextBox.Size = new System.Drawing.Size(197, 20);
+            this.soldpriceTextBox.TabIndex = 13;
+            this.soldpriceTextBox.TextChanged += new System.EventHandler(this.soldpriceTextBox_TextChanged);
             // 
             // PurchaseForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(453, 288);
-            this.Controls.Add(this.button2);
+            this.Controls.Add(this.soldpriceTextBox);
             this.Controls.Add(this.label6);
-            this.Controls.Add(this.textBox1);
-            this.Controls.Add(this.comboBox3);
-            this.Controls.Add(this.comboBox2);
-            this.Controls.Add(this.comboBox1);
+            this.Controls.Add(this.checkPostavshikButton);
+            this.Controls.Add(this.priceLabel);
+            this.Controls.Add(this.countTextBox1);
+            this.Controls.Add(this.markBox3);
+            this.Controls.Add(this.izgotovitelBox2);
+            this.Controls.Add(this.zapchastBox1);
             this.Controls.Add(this.label5);
             this.Controls.Add(this.label4);
             this.Controls.Add(this.label3);
             this.Controls.Add(this.label2);
             this.Controls.Add(this.label1);
-            this.Controls.Add(this.button1);
+            this.Controls.Add(this.buyButton);
             this.Name = "PurchaseForm";
             this.Text = "Закупки";
             this.Load += new System.EventHandler(this.PurchaseForm_Load);
@@ -184,17 +207,19 @@
 
         #endregion
 
-        private System.Windows.Forms.Button button1;
+        private System.Windows.Forms.Button buyButton;
         private System.Windows.Forms.Label label1;
         private System.Windows.Forms.Label label2;
         private System.Windows.Forms.Label label3;
         private System.Windows.Forms.Label label4;
         private System.Windows.Forms.Label label5;
-        private System.Windows.Forms.ComboBox comboBox1;
-        private System.Windows.Forms.ComboBox comboBox2;
-        private System.Windows.Forms.ComboBox comboBox3;
-        private System.Windows.Forms.TextBox textBox1;
+        private System.Windows.Forms.ComboBox zapchastBox1;
+        private System.Windows.Forms.ComboBox izgotovitelBox2;
+        private System.Windows.Forms.ComboBox markBox3;
+        private System.Windows.Forms.TextBox countTextBox1;
+        private System.Windows.Forms.Label priceLabel;
+        private System.Windows.Forms.Button checkPostavshikButton;
         private System.Windows.Forms.Label label6;
-        private System.Windows.Forms.Button button2;
+        private System.Windows.Forms.TextBox soldpriceTextBox;
     }
 }
