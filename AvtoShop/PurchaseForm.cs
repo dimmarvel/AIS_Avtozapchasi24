@@ -13,7 +13,6 @@ using System.Windows.Forms;
 
 namespace AvtoShop
 {
-
     public partial class PurchaseForm : Form
     {
         public class BuyTable
@@ -49,10 +48,10 @@ namespace AvtoShop
         {
             try
             {
-
                 _sqlConnection = new SqlConnection(@"Data Source=(LocalDB)\MSSQLLocalDB;AttachDbFilename=C:\Users\dimma\Desktop\AvtoShop\AvtoShop\Database1.mdf;Integrated Security=True");
                 _sqlConnection.Open(); //connect to database (load data from bd in datagrid view)
                 _buyTable = new List<BuyTable>();
+
                 ReadDataToClass();
 
                 izgotovitelBox2.Text = _buyTable[0]._izgotovitel;
@@ -142,7 +141,7 @@ namespace AvtoShop
                 _sqlCommand = new SqlCommand(queryDB, _sqlConnection);
                 _sqlCommand.ExecuteNonQuery();
 
-                MessageBox.Show("Товар успешно куплен и добавлен на склад!\n" +
+                MessageBox.Show("Товар успешно продан!\n" +
                    izgotovitelBox2.Text + " - " + zapchastBox1.Text + " - " + 
                    markBox3.Text + " - " + countTextBox1.Text + "шт.", 
                    "Информация", MessageBoxButtons.OK, MessageBoxIcon.Information);
@@ -150,23 +149,7 @@ namespace AvtoShop
             }
             else
             {
-                string queryDB = "INSERT INTO[Products](Запчасть, Марка, Наличие, Изготовитель, Цена, Количество)" +
-                    "VALUES(@zapchast, @mark, @nalichie, @izgotovitel, @price, @count)";
-
-                _sqlCommand = new SqlCommand(queryDB, _sqlConnection);
-                _sqlCommand.Parameters.AddWithValue("zapchast", zapchastBox1.Text);
-                _sqlCommand.Parameters.AddWithValue("mark", markBox3.Text);
-                _sqlCommand.Parameters.AddWithValue("nalichie", "True");
-                _sqlCommand.Parameters.AddWithValue("izgotovitel", izgotovitelBox2.Text);
-                _sqlCommand.Parameters.AddWithValue("price", soldpriceTextBox.Text);
-                _sqlCommand.Parameters.AddWithValue("count", countTextBox1.Text);
-                
-                _sqlCommand.ExecuteNonQuery();
-
-                MessageBox.Show("Товар успешно куплен!\nТовара (" + izgotovitelBox2.Text + " " + zapchastBox1.Text + " " + markBox3.Text +
-                    ") ещё небыло на складе. Пожалуйста, установите цену этому товару в разделе \"Товары\" по умолчанию цена 0$.",
-                    "Предупреждение!",MessageBoxButtons.OK, MessageBoxIcon.Warning);
-                // добавить в таблицу product если не существует такой записи по данным из комбобоксов
+                MessageBox.Show("Товара не существует на складе!", "Предупреждение",MessageBoxButtons.OK, MessageBoxIcon.Warning);
             }
 
         }
@@ -236,7 +219,7 @@ namespace AvtoShop
                 RecalcPrice();
             }else
             {
-                MessageBox.Show("Слишком большое количество заказанных деталей.", "Error!", 
+                MessageBox.Show("Слишком большое количество.", "Error!", 
                     MessageBoxButtons.OK, MessageBoxIcon.Error);
                 countTextBox1.Text = "1";
             }
@@ -276,6 +259,17 @@ namespace AvtoShop
             Postavshiki postavshiki = new Postavshiki();
             postavshiki.Show();
         }
+
+        private void soldpriceTextBox_KeyPress(object sender, KeyPressEventArgs e)
+        {
+            char number = e.KeyChar;
+
+            if (!Char.IsDigit(number))
+            {
+                e.Handled = true;
+            }
+        }
+
         private void comboBox3_SelectedIndexChanged(object sender, EventArgs e)
         {
         }
@@ -290,13 +284,13 @@ namespace AvtoShop
 
         }
 
-        private void soldpriceTextBox_KeyPress(object sender, KeyPressEventArgs e)
+        private void soldpriceTextBox_TextChanged_1(object sender, EventArgs e)
         {
-            char number = e.KeyChar;
-
-            if (!Char.IsDigit(number))
+            if (int.Parse(soldpriceTextBox.Text) > 10000001)
             {
-                e.Handled = true;
+                MessageBox.Show("Слишком большая цена продажи.", "Error!",
+                    MessageBoxButtons.OK, MessageBoxIcon.Error);
+                countTextBox1.Text = "1";
             }
         }
     }

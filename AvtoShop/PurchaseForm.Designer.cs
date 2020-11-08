@@ -176,6 +176,7 @@
             this.soldpriceTextBox.Name = "soldpriceTextBox";
             this.soldpriceTextBox.Size = new System.Drawing.Size(197, 20);
             this.soldpriceTextBox.TabIndex = 13;
+            this.soldpriceTextBox.TextChanged += new System.EventHandler(this.soldpriceTextBox_TextChanged_1);
             this.soldpriceTextBox.KeyPress += new System.Windows.Forms.KeyPressEventHandler(this.soldpriceTextBox_KeyPress);
             // 
             // PurchaseForm

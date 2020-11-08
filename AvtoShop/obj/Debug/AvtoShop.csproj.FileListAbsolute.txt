@@ -16,3 +16,4 @@ C:\Users\dimma\Desktop\AvtoShop\AvtoShop\bin\Debug\Database1.mdf
 C:\Users\dimma\Desktop\AvtoShop\AvtoShop\bin\Debug\Database1_log.ldf
 C:\Users\dimma\Desktop\AvtoShop\AvtoShop\obj\Debug\AvtoShop.PurchaseForm.resources
 C:\Users\dimma\Desktop\AvtoShop\AvtoShop\obj\Debug\AvtoShop.Postavshiki.resources
+C:\Users\dimma\Desktop\AvtoShop\AvtoShop\obj\Debug\AvtoShop.Storage.resources
