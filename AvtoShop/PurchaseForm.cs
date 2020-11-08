@@ -62,6 +62,7 @@ namespace AvtoShop
             {
                 MessageBox.Show("Error: " + ex.Message , "Error!",
                     MessageBoxButtons.OK, MessageBoxIcon.Error);
+                this.Close();
             }
         }
 
@@ -131,19 +132,19 @@ namespace AvtoShop
             BuyTable changeTable = new BuyTable();
 
             if (CheckExistenceTable(ref changeTable)) // существует ли на складе товар
-            {
-                MessageBox.Show("А такое в таблице ЕСТЬ");   
-                
+            { 
                 //_price_per_one здесь в роли количества если юзаем таблицу Products
-                string queryDB = "UPDATE Products SET Количество = '"+ (changeTable._price_per_one + int.Parse(countTextBox1.Text)) +
+                string queryDB = "UPDATE Products SET " +
+                                "Количество = '"+ (changeTable._price_per_one + int.Parse(countTextBox1.Text)) +
+                                "', Цена = '" + soldpriceTextBox.Text + 
                                 "' WHERE Id = " + changeTable._id + ";";
 
                 _sqlCommand = new SqlCommand(queryDB, _sqlConnection);
                 _sqlCommand.ExecuteNonQuery();
 
-                MessageBox.Show("Товар успешно куплен и добавлен на склад!" +
+                MessageBox.Show("Товар успешно куплен и добавлен на склад!\n" +
                    izgotovitelBox2.Text + " - " + zapchastBox1.Text + " - " + 
-                   markBox3.Text + " - " + countTextBox1.Text + "шт. - ", 
+                   markBox3.Text + " - " + countTextBox1.Text + "шт.", 
                    "Информация", MessageBoxButtons.OK, MessageBoxIcon.Information);
 
             }
@@ -287,6 +288,16 @@ namespace AvtoShop
         private void soldpriceTextBox_TextChanged(object sender, EventArgs e)
         {
 
+        }
+
+        private void soldpriceTextBox_KeyPress(object sender, KeyPressEventArgs e)
+        {
+            char number = e.KeyChar;
+
+            if (!Char.IsDigit(number))
+            {
+                e.Handled = true;
+            }
         }
     }
 }
