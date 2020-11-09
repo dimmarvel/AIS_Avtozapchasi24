@@ -44,7 +44,7 @@ namespace AvtoShop
                 for (int i = 0; i < dataGridView1.Rows.Count; i++)
                 {
                     DataGridViewLinkCell linkCell = new DataGridViewLinkCell();
-                    dataGridView1[7, i] = linkCell;
+                    dataGridView1[6, i] = linkCell;
                 }
             }
             catch(Exception ex)
@@ -66,7 +66,7 @@ namespace AvtoShop
                 for (int i = 0; i < dataGridView1.Rows.Count; i++)
                 {
                     DataGridViewLinkCell linkCell = new DataGridViewLinkCell();
-                    dataGridView1[7, i] = linkCell;
+                    dataGridView1[6, i] = linkCell;
                 }
             }
             catch(Exception ex)
@@ -95,9 +95,9 @@ namespace AvtoShop
         {
             try
             {
-                if(e.ColumnIndex == 7)
+                if(e.ColumnIndex == 6)
                 {
-                    string task = dataGridView1.Rows[e.RowIndex].Cells[7].Value.ToString();
+                    string task = dataGridView1.Rows[e.RowIndex].Cells[6].Value.ToString();
 
                     if(task == "Delete")
                     {
@@ -126,7 +126,7 @@ namespace AvtoShop
                         _dataSet.Tables["Products"].Rows.Add(row);
                         _dataSet.Tables["Products"].Rows.RemoveAt(_dataSet.Tables["Products"].Rows.Count - 1);
                         dataGridView1.Rows.RemoveAt(dataGridView1.Rows.Count - 2);
-                        dataGridView1.Rows[e.RowIndex].Cells[7].Value = "Delete";
+                        dataGridView1.Rows[e.RowIndex].Cells[6].Value = "Delete";
                         _sqlDataAdapter.Update(_dataSet, "Products");
 
                         newRowAdding = false;
@@ -143,7 +143,7 @@ namespace AvtoShop
                         _dataSet.Tables["Products"].Rows[r]["Количество"] = dataGridView1.Rows[r].Cells["Количество"].Value;
 
                         _sqlDataAdapter.Update(_dataSet, "Products");
-                        dataGridView1.Rows[e.RowIndex].Cells[7].Value = "Delete";
+                        dataGridView1.Rows[e.RowIndex].Cells[6].Value = "Delete";
                     }
 
                     ReloadData();
@@ -187,7 +187,7 @@ namespace AvtoShop
                     DataGridViewRow editingRow = dataGridView1.Rows[rowIndex];
                     DataGridViewLinkCell linkCell = new DataGridViewLinkCell();
 
-                    dataGridView1[7, rowIndex] = linkCell;
+                    dataGridView1[6, rowIndex] = linkCell;
                     editingRow.Cells["Command"].Value = "Update";
                 }
             }

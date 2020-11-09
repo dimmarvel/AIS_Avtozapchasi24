@@ -36,11 +36,8 @@ namespace AvtoShop
             }
         }
 
-        private SqlCommandBuilder _sqlBuilder = null;
         private SqlConnection _sqlConnection = null;
         private SqlCommand _sqlCommand = null;
-        private SqlDataAdapter _sqlDataAdapter = null;
-        private DataSet _dataSet = null;
         private List<Products> _products = null;
 
         public SalesForm()
@@ -182,8 +179,8 @@ namespace AvtoShop
             {
                 Products bt = new Products();
                 bt.Add_data((int)sqlDataReader[0], sqlDataReader[1].ToString(), 
-                            sqlDataReader[2].ToString(), sqlDataReader[4].ToString(), 
-                            (int)sqlDataReader[5], (int)sqlDataReader[6]);
+                            sqlDataReader[2].ToString(), sqlDataReader[3].ToString(), 
+                            (int)sqlDataReader[4], (int)sqlDataReader[5]);
                 tempTable.Add(bt);
             }
 
@@ -213,8 +210,8 @@ namespace AvtoShop
                 Products bt = new Products();
 
                 bt.Add_data((int)sqlDataReader[0], sqlDataReader[1].ToString(), 
-                            sqlDataReader[2].ToString(), sqlDataReader[4].ToString(), 
-                            (int)sqlDataReader[5], (int)sqlDataReader[6]);
+                            sqlDataReader[2].ToString(), sqlDataReader[3].ToString(), 
+                            (int)sqlDataReader[4], (int)sqlDataReader[5]);
 
                 _products.Add(bt);
             }
@@ -281,9 +278,15 @@ namespace AvtoShop
         {
             if (!Char.IsDigit(e.KeyChar)) e.Handled = true;
         }
+        private void button1_Click_1(object sender, EventArgs e)
+        {
+            Basket basket = new Basket();
+            basket.Show();
+        }
 
         private void comboBox3_SelectedIndexChanged(object sender, EventArgs e){}
         private void label6_Click(object sender, EventArgs e){}
         private void soldpriceTextBox_TextChanged(object sender, EventArgs e){}
+
     }
 }
