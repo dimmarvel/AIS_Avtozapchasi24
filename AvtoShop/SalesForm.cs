@@ -39,7 +39,8 @@ namespace AvtoShop
         private SqlConnection _sqlConnection = null;
         private SqlCommand _sqlCommand = null;
         private List<Products> _products = null;
-
+        private Storage storage = null;
+        private Basket basket = null;
         public SalesForm()
         {
             InitializeComponent();
@@ -114,64 +115,82 @@ namespace AvtoShop
 
         private void button1_Click(object sender, EventArgs e)
         {
-            if (countTextBox1.Text == "")
+            try
             {
-                MessageBox.Show("Добавьте количество товара которое хотите купить.", "Предупреждение!",
-                    MessageBoxButtons.OK, MessageBoxIcon.Warning);
-                return;
-            }
-
-            Products changeTable = new Products();
-
-            if (CheckExistenceTable(ref changeTable)) // существует ли на складе товар
-            {
-                string queryDB = "";
-
-                if (changeTable._count == int.Parse(countTextBox1.Text))
+                if (countTextBox1.Text == "")
                 {
-                    queryDB = "DELETE Products " +
-                              "WHERE Id = " + changeTable._id + ";";
-
-                    MessageBox.Show("После покупки, товара - " +
-                       izgotovitelBox2.Text + " - " + zapchastBox1.Text + " - " +
-                       markBox3.Text + " - " + countTextBox1.Text + "шт., не останется на складе.",
-                       "Информация", MessageBoxButtons.OK, MessageBoxIcon.Information);
-                }
-                else if (changeTable._count > int.Parse(countTextBox1.Text))
-                {
-                    queryDB = "UPDATE Products SET " +
-                              "Количество = '" + (changeTable._count - int.Parse(countTextBox1.Text)) +
-                              "' WHERE Id = " + changeTable._id + ";";
-                }
-                else
-                {
-                    MessageBox.Show("Такого количества товара нет на складе. \n" +
-                       "На складе существует: " + changeTable._izgotovitel + " - " 
-                       + changeTable._zapchast + " - " + changeTable._mark + " - " + changeTable._count + "шт.",
-                       "Информация", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                    MessageBox.Show("Добавьте количество товара которое хотите купить.", "Предупреждение!",
+                        MessageBoxButtons.OK, MessageBoxIcon.Warning);
                     return;
                 }
 
-                _sqlCommand = new SqlCommand(queryDB, _sqlConnection);
-                _sqlCommand.ExecuteNonQuery();
+                Products changeTable = new Products();
+                
+                if (CheckExistenceTable(ref changeTable, "Products")) // существует ли на складе товар
+                {
+                    string queryDB = "INSERT INTO Basket (Запчасть, Марка, Изготовитель, Цена, Количество)" + " VALUES(N'" +
+                                    changeTable._zapchast + "', N'" +
+                                    changeTable._mark + "', N'" +
+                                    changeTable._izgotovitel + "', '" +
+                                    changeTable._price_per_one + "', '" +
+                                    countTextBox1.Text + "');";
 
-                MessageBox.Show("Товар успешно куплен!\n" +
-                       izgotovitelBox2.Text + " - " + zapchastBox1.Text + " - " +
-                       markBox3.Text + " - " + countTextBox1.Text + "шт.",
-                       "Информация", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                    Products basketdata = new Products();
 
-                SetAllComboBox();
+                    if (CheckExistenceTable(ref basketdata, "Basket"))
+                    {
+                        int count = basketdata._count + int.Parse(countTextBox1.Text);
+                        queryDB = "UPDATE Basket SET " + "Количество = '" + count +
+                                  "' WHERE Id = " + basketdata._id + ";";
+                        // ТУТ ОСТАНОВИЛСЯ СДЕЛАЛ ДОБАВЛЕНИЕ В КОРЗИНУ
+                        MessageBox.Show("ТАКАЯ В ТАБЛИЦЕ УЖЕ ЕСТЬ ЗНАЧИТ ПРОСТО ПРИБАВИМ\n" + queryDB);
+
+                        if (changeTable._count == count)
+                        {
+                            MessageBox.Show("После покупки, товара - " + izgotovitelBox2.Text + " - " + zapchastBox1.Text +
+                                            " - " + markBox3.Text + " - " + countTextBox1.Text + "шт., не останется на складе.",
+                                            "Информация", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                        }
+                        else if (changeTable._count < count)
+                        {
+                            MessageBox.Show("Такого количества товара нет на складе. \n" + "На складе существует: " 
+                                            + changeTable._izgotovitel + " - " + changeTable._zapchast + " - " 
+                                            + changeTable._mark + " - " + changeTable._count + "шт.",
+                                            "Информация", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                            return;
+                        }
+                    }
+
+                    _sqlCommand = new SqlCommand(queryDB, _sqlConnection);
+                    _sqlCommand.ExecuteNonQuery();
+
+                    MessageBox.Show("Товар добавлен в корзину!\n" +
+                           izgotovitelBox2.Text + " - " + zapchastBox1.Text + " - " +
+                           markBox3.Text + " - " + countTextBox1.Text + "шт.",
+                           "Информация", MessageBoxButtons.OK, MessageBoxIcon.Information);
+
+                    SetAllComboBox();
+                }
+                else
+                {
+                    MessageBox.Show("Товара не существует, перепроверьте данные. Возможно ошибка программная.",
+                        "Предупреждение!", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                }
             }
-            else // не может быть но мало ли
+            catch (Exception ex)
             {
-                MessageBox.Show("Товара не существует, перепроверьте данные. Возможно ошибка программная.",
-                    "Предупреждение!",MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                MessageBox.Show(ex.Message);
             }
+            //queryDB = "DELETE Products " +
+            //"WHERE Id = " + changeTable._id + ";";
+            //queryDB = "UPDATE Products SET " +
+            //          "Количество = '" + (changeTable._count - int.Parse(countTextBox1.Text)) +
+            //          "' WHERE Id = " + changeTable._id + ";";
         }
 
-        private bool CheckExistenceTable(ref Products products)
+        private bool CheckExistenceTable(ref Products products, string table)
         {
-            SqlCommand sqlCommand = new SqlCommand("SELECT * FROM Products", _sqlConnection);
+            SqlCommand sqlCommand = new SqlCommand("SELECT * FROM " + table, _sqlConnection);
             SqlDataReader sqlDataReader = sqlCommand.ExecuteReader();
             List<Products> tempTable = new List<Products>();
 
@@ -270,18 +289,19 @@ namespace AvtoShop
 
         private void button2_Click(object sender, EventArgs e)
         {
-            Storage storage = new Storage();
-            storage.Show();
+                storage = new Storage();
+                storage.Show();
         }
 
         private void soldpriceTextBox_KeyPress(object sender, KeyPressEventArgs e)
         {
             if (!Char.IsDigit(e.KeyChar)) e.Handled = true;
         }
+
         private void button1_Click_1(object sender, EventArgs e)
         {
-            Basket basket = new Basket();
-            basket.Show();
+                basket = new Basket();
+                basket.Show();
         }
 
         private void comboBox3_SelectedIndexChanged(object sender, EventArgs e){}

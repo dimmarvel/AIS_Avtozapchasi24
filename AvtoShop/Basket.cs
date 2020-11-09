@@ -13,10 +13,31 @@ namespace AvtoShop
 {
     public partial class Basket : Form
     {
-        private SqlConnection _sqlConnection = null;
-        private SqlCommandBuilder _sqlBuilder = null;
-        private SqlDataAdapter _sqlDataAdapter = null;
-        private DataSet _dataSet = null;
+        public class BasketTable
+        {
+            public int      _id;
+            public string   _zapchast;
+            public string   _mark;
+            public string   _izgotovitel;
+            public int      _price_per_one;
+            public int      _count;
+
+            public void Add_data(int id, string zap, string mark, string izg, int price, int count)
+            {
+                _id             = id;
+                _zapchast       = zap;
+                _mark           = mark;
+                _izgotovitel    = izg;
+                _price_per_one  = price;
+                _count          = count;
+            }
+        }
+
+        private SqlConnection _sqlConnection    = null;
+        private SqlCommandBuilder _sqlBuilder   = null;
+        private SqlDataAdapter _sqlDataAdapter  = null;
+        private DataSet _dataSet                = null;
+        private List<BasketTable> _basket       = null;
         private bool newRowAdding;
 
         public Basket()
@@ -29,6 +50,7 @@ namespace AvtoShop
             _sqlConnection = new SqlConnection(@"Data Source=(LocalDB)\MSSQLLocalDB;AttachDbFilename=C:\Users\dimma\Desktop\AvtoShop\AvtoShop\Database1.mdf;Integrated Security=True");
             _sqlConnection.Open(); //connect to database (load data from bd in datagrid view)
             LoadData();
+            RecalcPrice();
         }
 
         private void LoadData()
@@ -207,5 +229,54 @@ namespace AvtoShop
                 e.Handled = true;
             }
         }
+
+        private void button1_Click(object sender, EventArgs e)
+        {
+            ReloadData();
+            RecalcPrice();
+        }
+
+        private void RecalcPrice()
+        {
+            SqlCommand sqlCommand = new SqlCommand("SELECT * FROM Basket", _sqlConnection);
+            SqlDataReader sqlDataReader = sqlCommand.ExecuteReader();
+            int price = 0;
+
+            while (sqlDataReader.Read())
+            {
+                price += (int)sqlDataReader[4] * (int)sqlDataReader[5];
+            }
+
+            priceLabel.Text = price.ToString();
+            sqlDataReader.Close();
+        }
+
+        private void button2_Click(object sender, EventArgs e)
+        {
+            ReadDataToClass();
+
+        }
+
+        private void ReadDataToClass()
+        {
+            SqlCommand sqlCommand = new SqlCommand("SELECT * FROM Basket", _sqlConnection);
+            SqlDataReader sqlDataReader = sqlCommand.ExecuteReader();
+            _basket = new List<BasketTable>(); // update
+
+            while (sqlDataReader.Read())
+            {
+                BasketTable bt = new BasketTable();
+
+                bt.Add_data((int)sqlDataReader[0],      sqlDataReader[1].ToString(),
+                            sqlDataReader[2].ToString(),sqlDataReader[3].ToString(),
+                            (int)sqlDataReader[4], (int)sqlDataReader[5]);
+
+                _basket.Add(bt);
+            }
+
+            sqlDataReader.Close();
+        }
+
+        private void toolStripButton1_Click(object sender, EventArgs e){}
     }
 }

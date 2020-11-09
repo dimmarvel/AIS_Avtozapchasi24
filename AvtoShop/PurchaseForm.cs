@@ -141,7 +141,7 @@ namespace AvtoShop
                 _sqlCommand = new SqlCommand(queryDB, _sqlConnection);
                 _sqlCommand.ExecuteNonQuery();
 
-                MessageBox.Show("Товар успешно продан!\n" +
+                MessageBox.Show("Товар успешно куплен!\n" +
                    izgotovitelBox2.Text + " - " + zapchastBox1.Text + " - " + 
                    markBox3.Text + " - " + countTextBox1.Text + "шт.", 
                    "Информация", MessageBoxButtons.OK, MessageBoxIcon.Information);
