@@ -12,20 +12,18 @@ namespace AvtoShop
 {
     public partial class MainMenu : Form
     {
-        private static StorageForm _storageForm;
-        private static PurchaseForm _purchaseForm;
-        private static ProductsForm _productsForm;
-        private static SalesStatisticsForm _salesStatForm;
-        private static SalesForm _salesForm;
+        private static StorageForm          _storageForm;
+        private static PurchaseForm         _purchaseForm;
+        private static ProductsForm         _productsForm;
+        private static SalesStatisticsForm  _salesStatForm;
+        private static SalesForm            _salesForm;
 
         public MainMenu()
         {
             InitializeComponent();
         }
 
-        private void Form1_Load(object sender, EventArgs e)
-        {
-        }
+        private void Form1_Load(object sender, EventArgs e){}
 
         private void PurchaseButton_Click(object sender, EventArgs e)
         {

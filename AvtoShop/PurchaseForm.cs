@@ -207,7 +207,7 @@ namespace AvtoShop
 
                 bt.Add_data((int)sqlDataReader[0], sqlDataReader[1].ToString(), 
                             sqlDataReader[2].ToString(), sqlDataReader[3].ToString(), 
-                            (int)sqlDataReader[4],0);
+                            (int)sqlDataReader[4], 0);
 
                 _buyTable.Add(bt);
             }

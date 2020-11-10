@@ -59,14 +59,13 @@ namespace AvtoShop
             {
                 // SELECT(выбрать все сущности из таблицы) остальное для управления по таблице
                 _sqlDataAdapter = new SqlDataAdapter("SELECT *, 'Delete' AS [Комманда] FROM Basket", _sqlConnection);
-
-                _sqlBuilder = new SqlCommandBuilder(_sqlDataAdapter); //init
+                _sqlBuilder     = new SqlCommandBuilder(_sqlDataAdapter); //init
+                _dataSet        = new DataSet();
 
                 _sqlBuilder.GetInsertCommand(); //generate command for insert update and delete
                 _sqlBuilder.GetUpdateCommand();
                 _sqlBuilder.GetDeleteCommand();
 
-                _dataSet = new DataSet();
                 _sqlDataAdapter.Fill(_dataSet, "Basket");
 
                 dataGridView1.DataSource = _dataSet.Tables["Basket"];
@@ -82,14 +81,13 @@ namespace AvtoShop
                 MessageBox.Show(ex.Message, "Error!", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
         }
+
         private void ReloadData()
         {
             try
             {
                 _dataSet.Tables["Basket"].Clear();
-
                 _sqlDataAdapter.Fill(_dataSet, "Basket");
-
                 dataGridView1.DataSource = _dataSet.Tables["Basket"];
 
                 for (int i = 0; i < dataGridView1.Rows.Count; i++)
@@ -173,7 +171,6 @@ namespace AvtoShop
                 if (newRowAdding == false)
                 {
                     newRowAdding = true;
-
                     int lastRow = dataGridView1.Rows.Count - 2;
                     DataGridViewRow row = dataGridView1.Rows[lastRow];
                     DataGridViewLinkCell linkCell = new DataGridViewLinkCell();
@@ -194,12 +191,11 @@ namespace AvtoShop
             {
                 if (newRowAdding == false)
                 {
-                    int rowIndex = dataGridView1.SelectedCells[0].RowIndex;
-                    DataGridViewRow editingRow = dataGridView1.Rows[rowIndex];
-                    DataGridViewLinkCell linkCell = new DataGridViewLinkCell();
-
-                    dataGridView1[6, rowIndex] = linkCell;
-                    editingRow.Cells["Комманда"].Value = "Update";
+                    int rowIndex                        = dataGridView1.SelectedCells[0].RowIndex;
+                    DataGridViewRow editingRow          = dataGridView1.Rows[rowIndex];
+                    DataGridViewLinkCell linkCell       = new DataGridViewLinkCell();
+                    dataGridView1[6, rowIndex]          = linkCell;
+                    editingRow.Cells["Комманда"].Value  = "Update";
                 }
             }
             catch (Exception ex)
@@ -217,17 +213,14 @@ namespace AvtoShop
                 TextBox textBox = e.Control as TextBox;
 
                 if (textBox != null)
-                {
                     textBox.KeyPress += new KeyPressEventHandler(Column_KeyPress);
-                }
             }
         }
+
         private void Column_KeyPress(object sender, KeyPressEventArgs e)
         {
             if (!char.IsControl(e.KeyChar) && !char.IsDigit(e.KeyChar))
-            {
                 e.Handled = true;
-            }
         }
 
         private void button1_Click(object sender, EventArgs e)
@@ -238,14 +231,12 @@ namespace AvtoShop
 
         private void RecalcPrice()
         {
-            SqlCommand sqlCommand = new SqlCommand("SELECT * FROM Basket", _sqlConnection);
+            SqlCommand sqlCommand       = new SqlCommand("SELECT * FROM Basket", _sqlConnection);
             SqlDataReader sqlDataReader = sqlCommand.ExecuteReader();
             int price = 0;
 
             while (sqlDataReader.Read())
-            {
                 price += (int)sqlDataReader[4] * (int)sqlDataReader[5];
-            }
 
             priceLabel.Text = price.ToString();
             sqlDataReader.Close();
