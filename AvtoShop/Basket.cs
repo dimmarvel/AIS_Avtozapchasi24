@@ -13,31 +13,11 @@ namespace AvtoShop
 {
     public partial class Basket : Form
     {
-        public class BasketTable
-        {
-            public int      _id;
-            public string   _zapchast;
-            public string   _mark;
-            public string   _izgotovitel;
-            public int      _price_per_one;
-            public int      _count;
-
-            public void Add_data(int id, string zap, string mark, string izg, int price, int count)
-            {
-                _id             = id;
-                _zapchast       = zap;
-                _mark           = mark;
-                _izgotovitel    = izg;
-                _price_per_one  = price;
-                _count          = count;
-            }
-        }
-
         private SqlConnection _sqlConnection    = null;
         private SqlCommandBuilder _sqlBuilder   = null;
         private SqlDataAdapter _sqlDataAdapter  = null;
         private DataSet _dataSet                = null;
-        private List<BasketTable> _basket       = null;
+        private List<DataBase> _basket          = null;
         private bool newRowAdding;
 
         public Basket()
@@ -252,11 +232,11 @@ namespace AvtoShop
         {
             SqlCommand sqlCommand = new SqlCommand("SELECT * FROM Basket", _sqlConnection);
             SqlDataReader sqlDataReader = sqlCommand.ExecuteReader();
-            _basket = new List<BasketTable>(); // update
+            _basket = new List<DataBase>(); // update
 
             while (sqlDataReader.Read())
             {
-                BasketTable bt = new BasketTable();
+                DataBase bt = new DataBase();
 
                 bt.Add_data((int)sqlDataReader[0],      sqlDataReader[1].ToString(),
                             sqlDataReader[2].ToString(),sqlDataReader[3].ToString(),

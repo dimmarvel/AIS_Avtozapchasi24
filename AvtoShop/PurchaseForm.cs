@@ -15,31 +15,13 @@ namespace AvtoShop
 {
     public partial class PurchaseForm : Form
     {
-        public class BuyTable
-        {
-            public int _id;
-            public string _zapchast;
-            public string _mark;
-            public string _izgotovitel;
-            public int _price_per_one;
-            public int _count;
-            public void Add_data(int id, string zap, string mark, string izg, int price, int count)
-            {
-                _id = id;
-                _zapchast = zap;
-                _mark = mark;
-                _izgotovitel = izg;
-                _price_per_one = price;
-                _count = count;
-            }
-        }
 
         private SqlCommandBuilder _sqlBuilder = null;
         private SqlConnection _sqlConnection = null;
         private SqlCommand _sqlCommand = null;
         private SqlDataAdapter _sqlDataAdapter = null;
         private DataSet _dataSet = null;
-        private List<BuyTable> _buyTable = null;
+        private List<DataBase> _buyTable = null;
 
         public PurchaseForm()
         {
@@ -52,7 +34,7 @@ namespace AvtoShop
             {
                 _sqlConnection = new SqlConnection(@"Data Source=(LocalDB)\MSSQLLocalDB;AttachDbFilename=C:\Users\dimma\Desktop\AvtoShop\AvtoShop\Database1.mdf;Integrated Security=True");
                 _sqlConnection.Open(); //connect to database (load data from bd in datagrid view)
-                _buyTable = new List<BuyTable>();
+                _buyTable = new List<DataBase>();
 
                 ReadDataToClass();
 
@@ -130,7 +112,7 @@ namespace AvtoShop
                 return;
             }
 
-            BuyTable changeTable = new BuyTable();
+            DataBase changeTable = new DataBase();
 
             if (CheckExistenceTable(ref changeTable)) // существует ли на складе товар
             {
@@ -167,15 +149,15 @@ namespace AvtoShop
             }
         }
 
-        private bool CheckExistenceTable(ref BuyTable buyTable)
+        private bool CheckExistenceTable(ref DataBase buyTable)
         {
             SqlCommand sqlCommand = new SqlCommand("SELECT * FROM Products", _sqlConnection);
             SqlDataReader sqlDataReader = sqlCommand.ExecuteReader();
-            List<BuyTable> tempTable = new List<BuyTable>();
+            List<DataBase> tempTable = new List<DataBase>();
 
             while (sqlDataReader.Read()) // Read products table to List<class>
             {
-                BuyTable bt = new BuyTable();
+                DataBase bt = new DataBase();
                 bt.Add_data((int)sqlDataReader[0], sqlDataReader[1].ToString(), sqlDataReader[2].ToString(),
                                         sqlDataReader[3].ToString(), (int)sqlDataReader[4], (int)sqlDataReader[5]);
                 tempTable.Add(bt);
@@ -203,7 +185,7 @@ namespace AvtoShop
 
             while (sqlDataReader.Read())
             {
-                BuyTable bt = new BuyTable();
+                DataBase bt = new DataBase();
 
                 bt.Add_data((int)sqlDataReader[0], sqlDataReader[1].ToString(), 
                             sqlDataReader[2].ToString(), sqlDataReader[3].ToString(), 

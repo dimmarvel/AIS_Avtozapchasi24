@@ -16,29 +16,10 @@ namespace AvtoShop
 
     public partial class SalesForm : Form
     {
-        public class Products
-        {
-            public int _id;
-            public string _zapchast;
-            public string _mark;
-            public string _izgotovitel;
-            public int _price_per_one;
-            public int _count;
-
-            public void Add_data(int id, string zap, string mark, string izg, int price, int count)
-            {
-                _id = id;
-                _zapchast = zap;
-                _mark = mark;
-                _izgotovitel = izg;
-                _price_per_one = price;
-                _count = count;
-            }
-        }
 
         private SqlConnection _sqlConnection = null;
         private SqlCommand _sqlCommand = null;
-        private List<Products> _products = null;
+        private List<DataBase> _products = null;
         private Storage storage = null;
         private Basket basket = null;
         public SalesForm()
@@ -124,7 +105,7 @@ namespace AvtoShop
                     return;
                 }
 
-                Products changeTable = new Products();
+                DataBase changeTable = new DataBase();
                 
                 if (CheckExistenceTable(ref changeTable, "Products")) // существует ли на складе товар
                 {
@@ -135,7 +116,7 @@ namespace AvtoShop
                                     changeTable._price_per_one + "', '" +
                                     countTextBox1.Text + "');";
 
-                    Products basketdata = new Products();
+                    DataBase basketdata = new DataBase();
 
                     if (CheckExistenceTable(ref basketdata, "Basket")) //если в корзине уже есть такой товар
                     {
@@ -187,15 +168,15 @@ namespace AvtoShop
             //          "' WHERE Id = " + changeTable._id + ";";
         }
 
-        private bool CheckExistenceTable(ref Products products, string table)
+        private bool CheckExistenceTable(ref DataBase products, string table)
         {
             SqlCommand sqlCommand = new SqlCommand("SELECT * FROM " + table, _sqlConnection);
             SqlDataReader sqlDataReader = sqlCommand.ExecuteReader();
-            List<Products> tempTable = new List<Products>();
+            List<DataBase> tempTable = new List<DataBase>();
 
             while (sqlDataReader.Read()) // Read products table to List<class>
             {
-                Products bt = new Products();
+                DataBase bt = new DataBase();
                 bt.Add_data((int)sqlDataReader[0], sqlDataReader[1].ToString(), 
                             sqlDataReader[2].ToString(), sqlDataReader[3].ToString(), 
                             (int)sqlDataReader[4], (int)sqlDataReader[5]);
@@ -221,11 +202,11 @@ namespace AvtoShop
         {
             SqlCommand sqlCommand = new SqlCommand("SELECT * FROM Products", _sqlConnection);
             SqlDataReader sqlDataReader = sqlCommand.ExecuteReader();
-            _products = new List<Products>(); // update
+            _products = new List<DataBase>(); // update
 
             while (sqlDataReader.Read())
             {
-                Products bt = new Products();
+                DataBase bt = new DataBase();
 
                 bt.Add_data((int)sqlDataReader[0], sqlDataReader[1].ToString(), 
                             sqlDataReader[2].ToString(), sqlDataReader[3].ToString(), 

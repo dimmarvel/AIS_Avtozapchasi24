@@ -17,6 +17,7 @@ namespace AvtoShop
         private SqlCommandBuilder _sqlBuilder = null;
         private SqlDataAdapter _sqlDataAdapter = null;
         private DataSet _dataSet = null;
+
         public Postavshiki()
         {
             InitializeComponent();
