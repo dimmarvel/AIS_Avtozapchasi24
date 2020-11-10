@@ -137,13 +137,12 @@ namespace AvtoShop
 
                     Products basketdata = new Products();
 
-                    if (CheckExistenceTable(ref basketdata, "Basket"))
+                    if (CheckExistenceTable(ref basketdata, "Basket")) //если в корзине уже есть такой товар
                     {
-                        int count = basketdata._count + int.Parse(countTextBox1.Text);
+                        int count = basketdata._count + int.Parse(countTextBox1.Text); // сколько в корзине + сколько добавить ещё
                         queryDB = "UPDATE Basket SET " + "Количество = '" + count +
                                   "' WHERE Id = " + basketdata._id + ";";
                         // ТУТ ОСТАНОВИЛСЯ СДЕЛАЛ ДОБАВЛЕНИЕ В КОРЗИНУ
-                        MessageBox.Show("ТАКАЯ В ТАБЛИЦЕ УЖЕ ЕСТЬ ЗНАЧИТ ПРОСТО ПРИБАВИМ\n" + queryDB);
 
                         if (changeTable._count == count)
                         {

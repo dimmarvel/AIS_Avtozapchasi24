@@ -22,13 +22,15 @@ namespace AvtoShop
             public string _mark;
             public string _izgotovitel;
             public int _price_per_one;
-            public void Add_data(int id, string zap, string mark, string izg, int price)
+            public int _count;
+            public void Add_data(int id, string zap, string mark, string izg, int price, int count)
             {
                 _id = id;
                 _zapchast = zap;
                 _mark = mark;
                 _izgotovitel = izg;
                 _price_per_one = price;
+                _count = count;
             }
         }
 
@@ -131,28 +133,40 @@ namespace AvtoShop
             BuyTable changeTable = new BuyTable();
 
             if (CheckExistenceTable(ref changeTable)) // существует ли на складе товар
-            { 
+            {
                 //_price_per_one здесь в роли количества если юзаем таблицу Products
                 string queryDB = "UPDATE Products SET " +
-                                "Количество = '"+ (changeTable._price_per_one + int.Parse(countTextBox1.Text)) +
-                                "', Цена = '" + soldpriceTextBox.Text + 
+                                "Количество = '" + (changeTable._count + int.Parse(countTextBox1.Text)) +
+                                "', Цена = '" + soldpriceTextBox.Text +
                                 "' WHERE Id = " + changeTable._id + ";";
 
                 _sqlCommand = new SqlCommand(queryDB, _sqlConnection);
                 _sqlCommand.ExecuteNonQuery();
 
                 MessageBox.Show("Товар успешно куплен!\n" +
-                   izgotovitelBox2.Text + " - " + zapchastBox1.Text + " - " + 
-                   markBox3.Text + " - " + countTextBox1.Text + "шт.", 
+                   izgotovitelBox2.Text + " - " + zapchastBox1.Text + " - " +
+                   markBox3.Text + " - " + countTextBox1.Text + "шт.",
                    "Информация", MessageBoxButtons.OK, MessageBoxIcon.Information);
 
             }
             else
             {
-                MessageBox.Show("Товара не существует на складе!", "Предупреждение",MessageBoxButtons.OK, MessageBoxIcon.Warning);
-            }
+                string queryDB = "INSERT INTO[Products](Запчасть, Марка, Изготовитель, Цена, Количество)" +
+                    "VALUES(@zapchast, @mark, @izgotovitel, @price, @count)";
 
+                _sqlCommand = new SqlCommand(queryDB, _sqlConnection);
+                _sqlCommand.Parameters.AddWithValue("zapchast", zapchastBox1.Text);
+                _sqlCommand.Parameters.AddWithValue("mark", markBox3.Text);
+                _sqlCommand.Parameters.AddWithValue("izgotovitel", izgotovitelBox2.Text);
+                _sqlCommand.Parameters.AddWithValue("price", soldpriceTextBox.Text);
+                _sqlCommand.Parameters.AddWithValue("count", countTextBox1.Text);
+
+                _sqlCommand.ExecuteNonQuery();
+
+                MessageBox.Show("Товар успешно куплен!","Успех", MessageBoxButtons.OK, MessageBoxIcon.Information);
+            }
         }
+
         private bool CheckExistenceTable(ref BuyTable buyTable)
         {
             SqlCommand sqlCommand = new SqlCommand("SELECT * FROM Products", _sqlConnection);
@@ -163,7 +177,7 @@ namespace AvtoShop
             {
                 BuyTable bt = new BuyTable();
                 bt.Add_data((int)sqlDataReader[0], sqlDataReader[1].ToString(), sqlDataReader[2].ToString(),
-                                        sqlDataReader[4].ToString(), (int)sqlDataReader[6]);
+                                        sqlDataReader[3].ToString(), (int)sqlDataReader[4], (int)sqlDataReader[5]);
                 tempTable.Add(bt);
             }
 
@@ -193,7 +207,7 @@ namespace AvtoShop
 
                 bt.Add_data((int)sqlDataReader[0], sqlDataReader[1].ToString(), 
                             sqlDataReader[2].ToString(), sqlDataReader[3].ToString(), 
-                            (int)sqlDataReader[4]);
+                            (int)sqlDataReader[4],0);
 
                 _buyTable.Add(bt);
             }
