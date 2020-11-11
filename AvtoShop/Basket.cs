@@ -15,6 +15,7 @@ namespace AvtoShop
     {
         private SqlConnection _sqlConnection    = null;
         private SqlCommandBuilder _sqlBuilder   = null;
+        private SqlCommand _sqlCommand          = null;
         private SqlDataAdapter _sqlDataAdapter  = null;
         private DataSet _dataSet                = null;
         private List<DataBase> _basket          = null;
@@ -224,15 +225,41 @@ namespace AvtoShop
 
         private void button2_Click(object sender, EventArgs e)
         {
-            ReadDataToClass();
+            if(CheckingBasket() == false) return;
 
+            DataBase _products = new DataBase();
+
+            try
+            {
+                ReadDataToList("SELECT * FROM Basket", _basket);
+                string queryDB = "";
+
+                for (int i = 0; i < _basket.Count; i++)
+                {
+                    DataBase bd = null;
+                    if ((bd = CheckExistenceTable(_basket[i], "Products")) != null)
+                    {
+                        if (bd._count == _basket[i]._count)
+                            queryDB = "DELETE Products " + "WHERE Id = " + bd._id + ";";
+                        else if (bd._count > _basket[i]._count)
+                            queryDB = "UPDATE Products SET " + "Количество = '" +
+                                      (bd._count - _basket[i]._count) + "' WHERE Id = " + bd._id + ";";
+                    }
+                    _sqlCommand = new SqlCommand(queryDB, _sqlConnection);
+                    _sqlCommand.ExecuteNonQuery();
+                }
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show("Error: " + ex.Message, "
+            
         }
 
-        private void ReadDataToClass()
+        private void ReadDataToList(string query, List<DataBase> db)
         {
-            SqlCommand sqlCommand = new SqlCommand("SELECT * FROM Basket", _sqlConnection);
+            SqlCommand sqlCommand = new SqlCommand(query, _sqlConnection);
             SqlDataReader sqlDataReader = sqlCommand.ExecuteReader();
-            _basket = new List<DataBase>(); // update
+            db = new List<DataBase>();
 
             while (sqlDataReader.Read())
             {
@@ -240,12 +267,70 @@ namespace AvtoShop
 
                 bt.Add_data((int)sqlDataReader[0],      sqlDataReader[1].ToString(),
                             sqlDataReader[2].ToString(),sqlDataReader[3].ToString(),
-                            (int)sqlDataReader[4], (int)sqlDataReader[5]);
+                            (int)sqlDataReader[4],      (int)sqlDataReader[5]);
 
-                _basket.Add(bt);
+                db.Add(bt);
             }
 
             sqlDataReader.Close();
+        }
+
+        private bool CheckingBasket() //Checking the correctness of the basket
+        {
+            ReadDataToList("SELECT * FROM Basket", _basket);
+
+            for (int i = 0; i < _basket.Count; i++)
+            {
+                DataBase bd = null;
+                if ((bd = CheckExistenceTable(_basket[i], "Products")) != null)
+                {
+                    if (bd._count < _basket[i]._count)
+                    {
+                        MessageBox.Show("Error: " + "количество товара в корзине больше чем существует на складе.\n" +
+                            "На складе: " + bd._zapchast + " - " + bd._izgotovitel + " - " + bd._mark + " - " + bd._count + "\n" +
+                            "В корзине: " + _basket[i]._zapchast + " - " + _basket[i]._izgotovitel + " - " + _basket[i]._mark + " - " + _basket[i]._count
+                            , "Error!", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                        return false;
+                    }
+                }
+                else
+                {
+                    MessageBox.Show("Error: " + "товара не существует на складе.\n" +
+                            _basket[i]._zapchast + " - " + _basket[i]._izgotovitel + " - " + _basket[i]._mark + " - " + _basket[i]._count
+                            , "Error!", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                    return false;
+                }
+            }
+            return true;
+        }
+
+        private DataBase CheckExistenceTable(DataBase bd, string table)
+        {
+            SqlCommand sqlCommand = new SqlCommand("SELECT * FROM " + table, _sqlConnection);
+            SqlDataReader sqlDataReader = sqlCommand.ExecuteReader();
+            List<DataBase> tempTable = new List<DataBase>();
+
+            while (sqlDataReader.Read()) // Read products table to List<class>
+            {
+                DataBase bt = new DataBase();
+                bt.Add_data((int)sqlDataReader[0], sqlDataReader[1].ToString(),
+                            sqlDataReader[2].ToString(), sqlDataReader[3].ToString(),
+                            (int)sqlDataReader[4], (int)sqlDataReader[5]);
+                tempTable.Add(bt);
+            }
+
+            for (int i = 0; i < tempTable.Count; i++)
+            {
+                if (tempTable[i]._zapchast == bd._zapchast &&
+                    tempTable[i]._mark == bd._mark &&
+                    tempTable[i]._izgotovitel == bd._izgotovitel)
+                {
+                    sqlDataReader.Close();
+                    return tempTable[i];
+                }
+            }
+            sqlDataReader.Close();
+            return null;
         }
 
         private void toolStripButton1_Click(object sender, EventArgs e){}

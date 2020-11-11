@@ -107,9 +107,8 @@ namespace AvtoShop
 
             if (soldpriceTextBox.Text == "")
             {
-                MessageBox.Show("Добавьте цену продажи.", "Предупреждение!",
+                MessageBox.Show("Цена продажи не указана.", "Предупреждение!",
                     MessageBoxButtons.OK, MessageBoxIcon.Warning);
-                return;
             }
 
             DataBase changeTable = new DataBase();

@@ -161,11 +161,6 @@ namespace AvtoShop
             {
                 MessageBox.Show(ex.Message);
             }
-            //queryDB = "DELETE Products " +
-            //"WHERE Id = " + changeTable._id + ";";
-            //queryDB = "UPDATE Products SET " +
-            //          "Количество = '" + (changeTable._count - int.Parse(countTextBox1.Text)) +
-            //          "' WHERE Id = " + changeTable._id + ";";
         }
 
         private bool CheckExistenceTable(ref DataBase products, string table)
