@@ -17,7 +17,6 @@ namespace AvtoShop
         private SqlCommandBuilder _sqlBuilder = null;
         private SqlDataAdapter _sqlDataAdapter = null;
         private DataSet _dataSet = null;
-        private bool newRowAdding = false;
 
         public StorageForm()
         {
@@ -30,16 +29,6 @@ namespace AvtoShop
             _sqlConnection = new SqlConnection(@"Data Source=(LocalDB)\MSSQLLocalDB;AttachDbFilename=C:\Users\dimma\Desktop\AvtoShop\AvtoShop\Database1.mdf;Integrated Security=True");
             _sqlConnection.Open(); //connect to database (load data from bd in datagrid view)
             LoadData();
-        }
-
-        private void textBox1_TextChanged(object sender, EventArgs e)
-        {
-
-        }
-
-        private void comboBox1_SelectedIndexChanged(object sender, EventArgs e)
-        {
-
         }
 
         private void button1_Click(object sender, EventArgs e)
@@ -71,6 +60,10 @@ namespace AvtoShop
                 MessageBox.Show(ex.Message, "Error!", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
         }
+        private void button2_Click(object sender, EventArgs e)
+        {
+            (dataGridView1.DataSource as DataTable).DefaultView.RowFilter = string.Empty;
+        }
 
         private void label1_Click(object sender, EventArgs e)
         {
@@ -87,9 +80,14 @@ namespace AvtoShop
 
         }
 
-        private void button2_Click(object sender, EventArgs e)
+        private void textBox1_TextChanged(object sender, EventArgs e)
         {
-            (dataGridView1.DataSource as DataTable).DefaultView.RowFilter = string.Empty;
+
+        }
+
+        private void comboBox1_SelectedIndexChanged(object sender, EventArgs e)
+        {
+
         }
     }
 }

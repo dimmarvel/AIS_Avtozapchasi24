@@ -16,11 +16,8 @@ namespace AvtoShop
     public partial class PurchaseForm : Form
     {
 
-        private SqlCommandBuilder _sqlBuilder = null;
         private SqlConnection _sqlConnection = null;
         private SqlCommand _sqlCommand = null;
-        private SqlDataAdapter _sqlDataAdapter = null;
-        private DataSet _dataSet = null;
         private List<DataBase> _buyTable = null;
 
         public PurchaseForm()
@@ -34,8 +31,8 @@ namespace AvtoShop
             {
                 _sqlConnection = new SqlConnection(@"Data Source=(LocalDB)\MSSQLLocalDB;AttachDbFilename=C:\Users\dimma\Desktop\AvtoShop\AvtoShop\Database1.mdf;Integrated Security=True");
                 _sqlConnection.Open(); //connect to database (load data from bd in datagrid view)
-                _buyTable = new List<DataBase>();
 
+                _buyTable = new List<DataBase>();
                 ReadDataToClass();
 
                 izgotovitelBox2.Text = _buyTable[0]._izgotovitel;
