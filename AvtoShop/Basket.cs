@@ -231,7 +231,7 @@ namespace AvtoShop
 
             try
             {
-                ReadDataToList("SELECT * FROM Basket", _basket);
+                ReadDataToList("SELECT * FROM Basket",ref _basket);
                 string queryDB = "";
 
                 for (int i = 0; i < _basket.Count; i++)
@@ -244,18 +244,29 @@ namespace AvtoShop
                         else if (bd._count > _basket[i]._count)
                             queryDB = "UPDATE Products SET " + "Количество = '" +
                                       (bd._count - _basket[i]._count) + "' WHERE Id = " + bd._id + ";";
+
+                        ExecuteAnyQuery(queryDB, _sqlConnection);
+                        ReadDataToList("SELECT * FROM Basket",ref _basket);
                     }
-                    _sqlCommand = new SqlCommand(queryDB, _sqlConnection);
-                    _sqlCommand.ExecuteNonQuery();
                 }
+
+                ExecuteAnyQuery("DELETE FROM Basket", _sqlConnection); //clear basket
+
+                MessageBox.Show("Товары успешно проданы.\n", "Информация", MessageBoxButtons.OK, MessageBoxIcon.Information);
             }
             catch (Exception ex)
             {
-                MessageBox.Show("Error: " + ex.Message, "
-            
+                MessageBox.Show("Error: " + ex.Message, "Error!", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
         }
 
-        private void ReadDataToList(string query, List<DataBase> db)
+        void ExecuteAnyQuery(string query, SqlConnection connect)
+        {
+            _sqlCommand = new SqlCommand(query, connect); //clear basket
+            _sqlCommand.ExecuteNonQuery();
+        }
+
+        private void ReadDataToList(string query, ref List<DataBase> db)
         {
             SqlCommand sqlCommand = new SqlCommand(query, _sqlConnection);
             SqlDataReader sqlDataReader = sqlCommand.ExecuteReader();
@@ -277,7 +288,7 @@ namespace AvtoShop
 
         private bool CheckingBasket() //Checking the correctness of the basket
         {
-            ReadDataToList("SELECT * FROM Basket", _basket);
+            ReadDataToList("SELECT * FROM Basket",ref _basket);
 
             for (int i = 0; i < _basket.Count; i++)
             {
