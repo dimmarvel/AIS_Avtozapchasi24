@@ -31,7 +31,7 @@ namespace AvtoShop
         {
             try
             {
-                _sqlConnection = new SqlConnection(@"Data Source=(LocalDB)\MSSQLLocalDB;AttachDbFilename=C:\Users\dimma\Desktop\AvtoShop\AvtoShop\Database1.mdf;Integrated Security=True");
+                _sqlConnection = new SqlConnection($@"Data Source=(LocalDB)\MSSQLLocalDB;AttachDbFilename={Application.StartupPath}\Database1.mdf;Integrated Security=True");
                 _sqlConnection.Open(); //connect to database (load data from bd in datagrid view)
                 
                 ReadDataToClass();

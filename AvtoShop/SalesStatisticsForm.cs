@@ -17,6 +17,7 @@ namespace AvtoShop
         private SqlCommandBuilder _sqlBuilder = null;
         private SqlDataAdapter _sqlDataAdapter = null;
         private DataSet _dataSet = null;
+        private SqlCommand _sqlCommand = null;
 
         public SalesStatisticsForm()
         {
@@ -26,7 +27,7 @@ namespace AvtoShop
         private void SalesStatisticsForm_Load(object sender, EventArgs e)
         {
             set_date();
-            _sqlConnection = new SqlConnection(@"Data Source=(LocalDB)\MSSQLLocalDB;AttachDbFilename=C:\Users\dimma\Desktop\AvtoShop\AvtoShop\Database1.mdf;Integrated Security=True");
+            _sqlConnection = new SqlConnection($@"Data Source=(LocalDB)\MSSQLLocalDB;AttachDbFilename={Application.StartupPath}\Database1.mdf;Integrated Security=True");
             _sqlConnection.Open(); //connect to database (load data from bd in datagrid view)
             LoadData();
         }
@@ -41,7 +42,11 @@ namespace AvtoShop
 
         private void button1_Click(object sender, EventArgs e)
         {
-            
+            string query = "SELECT * FROM SoldStat " + "WHERE Дата_продажи BETWEEN " 
+                           + dateTimePicker1.Text + " AND " + dateTimePicker2.Text;
+
+            _sqlCommand = new SqlCommand(query, _sqlConnection);
+            _sqlCommand.ExecuteNonQuery();
         }
 
         private void LoadData()
