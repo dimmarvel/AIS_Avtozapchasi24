@@ -13,11 +13,11 @@ namespace AvtoShop
 {
     public partial class SalesStatisticsForm : Form
     {
-        private SqlConnection _sqlConnection = null;
-        private SqlCommandBuilder _sqlBuilder = null;
-        private SqlDataAdapter _sqlDataAdapter = null;
-        private DataSet _dataSet = null;
-        private SqlCommand _sqlCommand = null;
+        private SqlDataAdapter _sqlDataAdapter  = null;
+        private SqlCommandBuilder _sqlBuilder   = null;
+        private SqlConnection _sqlConnection    = null;
+        private SqlCommand _sqlCommand          = null;
+        private DataSet _dataSet                = null;
 
         public SalesStatisticsForm()
         {
@@ -34,19 +34,30 @@ namespace AvtoShop
 
         private void set_date()
         {
-            dateTimePicker1.Format = DateTimePickerFormat.Custom;
-            dateTimePicker2.Format = DateTimePickerFormat.Custom;
-            dateTimePicker1.CustomFormat = "dd/MM/yyyy hh:mm:ss";
-            dateTimePicker2.CustomFormat = "dd/MM/yyyy hh:mm:ss";
+            dateTimePicker1.Format          = DateTimePickerFormat.Custom;
+            dateTimePicker2.Format          = DateTimePickerFormat.Custom;
+            dateTimePicker1.CustomFormat    = "dd.MM.yyyy hh:mm";
+            dateTimePicker2.CustomFormat    = "dd.MM.yyyy hh:mm";
         }
 
         private void button1_Click(object sender, EventArgs e)
         {
-            string query = "SELECT * FROM SoldStat " + "WHERE Дата_продажи BETWEEN " 
-                           + dateTimePicker1.Text + " AND " + dateTimePicker2.Text;
+            try
+            {
+                string query = "SELECT * FROM SoldStat " + "WHERE [Дата_продажи] BETWEEN N'"
+                           + dateTimePicker1.Text + "' AND N'" + dateTimePicker2.Text + "'";
+                _sqlCommand = new SqlCommand(query, _sqlConnection);
+                SqlDataReader dr = _sqlCommand.ExecuteReader();
+                DataTable dt = new DataTable();
 
-            _sqlCommand = new SqlCommand(query, _sqlConnection);
-            _sqlCommand.ExecuteNonQuery();
+                dt.Load(dr);
+                dataGridView1.DataSource = dt;
+                MessageBox.Show("Таблица успешно обновлена!", "Успех", MessageBoxButtons.OK, MessageBoxIcon.Information);
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show(ex.Message, "Error!", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
         }
 
         private void LoadData()

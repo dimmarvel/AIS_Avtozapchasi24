@@ -38,6 +38,7 @@ namespace AvtoShop
             MessageBox.Show(send);
             (dataGridView1.DataSource as DataTable).DefaultView.RowFilter = 
                             string.Format($"{comboBox1.Text} = '{textBox1.Text}'");
+            MessageBox.Show("Поиск успешно выполнен!", "Успех", MessageBoxButtons.OK, MessageBoxIcon.Information);
         }
 
         private void LoadData()
@@ -46,10 +47,8 @@ namespace AvtoShop
             {
                 // SELECT(выбрать все сущности из таблицы) остальное для управления по таблице
                 _sqlDataAdapter = new SqlDataAdapter("SELECT * FROM Products", _sqlConnection);
-
-                _sqlBuilder = new SqlCommandBuilder(_sqlDataAdapter); //init
-
-                _dataSet = new DataSet(); //init
+                _sqlBuilder     = new SqlCommandBuilder(_sqlDataAdapter); //init
+                _dataSet        = new DataSet(); //init
 
                 _sqlDataAdapter.Fill(_dataSet, "Products"); // заполнение
                 dataGridView1.DataSource = _dataSet.Tables["Products"];
@@ -60,34 +59,10 @@ namespace AvtoShop
                 MessageBox.Show(ex.Message, "Error!", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
         }
+
         private void button2_Click(object sender, EventArgs e)
         {
             (dataGridView1.DataSource as DataTable).DefaultView.RowFilter = string.Empty;
-        }
-
-        private void label1_Click(object sender, EventArgs e)
-        {
-
-        }
-
-        private void textBox1_TextChanged_1(object sender, EventArgs e)
-        {
-
-        }
-
-        private void dataGridView1_CellContentClick(object sender, DataGridViewCellEventArgs e)
-        {
-
-        }
-
-        private void textBox1_TextChanged(object sender, EventArgs e)
-        {
-
-        }
-
-        private void comboBox1_SelectedIndexChanged(object sender, EventArgs e)
-        {
-
         }
     }
 }
