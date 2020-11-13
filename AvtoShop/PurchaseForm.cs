@@ -1,14 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.ComponentModel;
-using System.Data;
 using System.Data.SqlClient;
-using System.Drawing;
-using System.IO;
-using System.Linq;
-using System.Security.Policy;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows.Forms;
 
 namespace AvtoShop
@@ -16,9 +8,9 @@ namespace AvtoShop
     public partial class PurchaseForm : Form
     {
 
-        private SqlConnection _sqlConnection = null;
-        private SqlCommand _sqlCommand = null;
-        private List<DataBase> _buyTable = null;
+        private SqlConnection _sqlConnection    = null;
+        private List<DataBase> _buyTable        = null;
+        private SqlCommand _sqlCommand          = null;
 
         public PurchaseForm()
         {
@@ -40,8 +32,7 @@ namespace AvtoShop
             }
             catch (Exception ex)
             {
-                MessageBox.Show("Error: " + ex.Message , "Error!",
-                    MessageBoxButtons.OK, MessageBoxIcon.Error);
+                MessageBox.Show("Error: " + ex.Message , "Error!", MessageBoxButtons.OK, MessageBoxIcon.Error);
                 this.Close();
             }
         }
@@ -63,8 +54,7 @@ namespace AvtoShop
             List<string> temp = new List<string>();
             foreach (var it in _buyTable)
             {
-                if (temp.Contains(it._izgotovitel))
-                    continue;
+                if (temp.Contains(it._izgotovitel)) continue;
                 temp.Add(it._izgotovitel);
             }
             return temp;
@@ -147,9 +137,9 @@ namespace AvtoShop
 
         private bool CheckExistenceTable(ref DataBase buyTable)
         {
-            SqlCommand sqlCommand = new SqlCommand("SELECT * FROM Products", _sqlConnection);
+            SqlCommand sqlCommand       = new SqlCommand("SELECT * FROM Products", _sqlConnection);
             SqlDataReader sqlDataReader = sqlCommand.ExecuteReader();
-            List<DataBase> tempTable = new List<DataBase>();
+            List<DataBase> tempTable    = new List<DataBase>();
 
             while (sqlDataReader.Read()) // Read products table to List<class>
             {
@@ -161,9 +151,9 @@ namespace AvtoShop
 
             for(int i = 0; i < tempTable.Count; i++)
             {
-                if (tempTable[i]._zapchast == zapchastBox1.Text &&
-                    tempTable[i]._mark == markBox3.Text &&
-                    tempTable[i]._izgotovitel == izgotovitelBox2.Text)
+                if (tempTable[i]._zapchast      == zapchastBox1.Text &&
+                    tempTable[i]._mark          == markBox3.Text &&
+                    tempTable[i]._izgotovitel   == izgotovitelBox2.Text)
                 {
                     sqlDataReader.Close();
                     buyTable = tempTable[i];
@@ -176,7 +166,7 @@ namespace AvtoShop
         }
         private void ReadDataToClass()
         {
-            SqlCommand sqlCommand = new SqlCommand("SELECT * FROM BuyTable", _sqlConnection);
+            SqlCommand sqlCommand       = new SqlCommand("SELECT * FROM BuyTable", _sqlConnection);
             SqlDataReader sqlDataReader = sqlCommand.ExecuteReader();
 
             while (sqlDataReader.Read())
@@ -260,20 +250,6 @@ namespace AvtoShop
             {
                 e.Handled = true;
             }
-        }
-
-        private void comboBox3_SelectedIndexChanged(object sender, EventArgs e)
-        {
-        }
-
-        private void label6_Click(object sender, EventArgs e)
-        {
-
-        }
-
-        private void soldpriceTextBox_TextChanged(object sender, EventArgs e)
-        {
-
         }
 
         private void soldpriceTextBox_TextChanged_1(object sender, EventArgs e)

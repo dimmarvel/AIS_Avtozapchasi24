@@ -1,22 +1,16 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel;
 using System.Data;
 using System.Data.SqlClient;
-using System.Drawing;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows.Forms;
 
 namespace AvtoShop
 {
     public partial class Storage : Form
     {
-        private SqlConnection _sqlConnection = null;
-        private SqlCommandBuilder _sqlBuilder = null;
-        private SqlDataAdapter _sqlDataAdapter = null;
-        private DataSet _dataSet = null;
+        private SqlDataAdapter _sqlDataAdapter  = null;
+        private SqlCommandBuilder _sqlBuilder   = null;
+        private SqlConnection _sqlConnection    = null;
+        private DataSet _dataSet                = null;
 
         public Storage()
         {
@@ -35,14 +29,11 @@ namespace AvtoShop
             {
                 // SELECT(выбрать все сущности из таблицы) остальное для управления по таблице
                 _sqlDataAdapter = new SqlDataAdapter("SELECT * FROM Products", _sqlConnection);
-
-                _sqlBuilder = new SqlCommandBuilder(_sqlDataAdapter); //init
-
-                _dataSet = new DataSet(); //init
+                _sqlBuilder     = new SqlCommandBuilder(_sqlDataAdapter); //init
+                _dataSet        = new DataSet(); //init
 
                 _sqlDataAdapter.Fill(_dataSet, "Products"); // заполнение
                 dataGridView1.DataSource = _dataSet.Tables["Products"];
-
             }
             catch (Exception ex)
             {

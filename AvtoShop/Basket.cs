@@ -1,12 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.ComponentModel;
 using System.Data;
 using System.Data.SqlClient;
-using System.Drawing;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows.Forms;
 
 namespace AvtoShop
@@ -108,11 +103,11 @@ namespace AvtoShop
                         int rowIndex = dataGridView1.Rows.Count - 2;
                         DataRow row = _dataSet.Tables["Basket"].NewRow();
 
-                        row["Запчасть"] = dataGridView1.Rows[rowIndex].Cells["Запчасть"].Value;
-                        row["Марка"] = dataGridView1.Rows[rowIndex].Cells["Марка"].Value;
+                        row["Запчасть"]     = dataGridView1.Rows[rowIndex].Cells["Запчасть"].Value;
+                        row["Марка"]        = dataGridView1.Rows[rowIndex].Cells["Марка"].Value;
                         row["Изготовитель"] = dataGridView1.Rows[rowIndex].Cells["Изготовитель"].Value;
-                        row["Цена"] = dataGridView1.Rows[rowIndex].Cells["Цена"].Value;
-                        row["Количество"] = dataGridView1.Rows[rowIndex].Cells["Количество"].Value;
+                        row["Цена"]         = dataGridView1.Rows[rowIndex].Cells["Цена"].Value;
+                        row["Количество"]   = dataGridView1.Rows[rowIndex].Cells["Количество"].Value;
 
                         _dataSet.Tables["Basket"].Rows.Add(row);
                         _dataSet.Tables["Basket"].Rows.RemoveAt(_dataSet.Tables["Basket"].Rows.Count - 1);
@@ -126,11 +121,11 @@ namespace AvtoShop
                     {
                         int r = e.RowIndex;
 
-                        _dataSet.Tables["Basket"].Rows[r]["Запчасть"] = dataGridView1.Rows[r].Cells["Запчасть"].Value;
-                        _dataSet.Tables["Basket"].Rows[r]["Марка"] = dataGridView1.Rows[r].Cells["Марка"].Value;
-                        _dataSet.Tables["Basket"].Rows[r]["Изготовитель"] = dataGridView1.Rows[r].Cells["Изготовитель"].Value;
-                        _dataSet.Tables["Basket"].Rows[r]["Цена"] = dataGridView1.Rows[r].Cells["Цена"].Value;
-                        _dataSet.Tables["Basket"].Rows[r]["Количество"] = dataGridView1.Rows[r].Cells["Количество"].Value;
+                        _dataSet.Tables["Basket"].Rows[r]["Запчасть"]       = dataGridView1.Rows[r].Cells["Запчасть"].Value;
+                        _dataSet.Tables["Basket"].Rows[r]["Марка"]          = dataGridView1.Rows[r].Cells["Марка"].Value;
+                        _dataSet.Tables["Basket"].Rows[r]["Изготовитель"]   = dataGridView1.Rows[r].Cells["Изготовитель"].Value;
+                        _dataSet.Tables["Basket"].Rows[r]["Цена"]           = dataGridView1.Rows[r].Cells["Цена"].Value;
+                        _dataSet.Tables["Basket"].Rows[r]["Количество"]     = dataGridView1.Rows[r].Cells["Количество"].Value;
 
                         _sqlDataAdapter.Update(_dataSet, "Basket");
                         dataGridView1.Rows[e.RowIndex].Cells[6].Value = "Delete";
@@ -268,9 +263,9 @@ namespace AvtoShop
 
         private void ReadDataToList(string query, ref List<DataBase> db)
         {
-            SqlCommand sqlCommand = new SqlCommand(query, _sqlConnection);
+            SqlCommand sqlCommand       = new SqlCommand(query, _sqlConnection);
             SqlDataReader sqlDataReader = sqlCommand.ExecuteReader();
-            db = new List<DataBase>();
+            db  = new List<DataBase>();
 
             while (sqlDataReader.Read())
             {
@@ -317,9 +312,9 @@ namespace AvtoShop
 
         private DataBase CheckExistenceTable(DataBase bd, string table)
         {
-            SqlCommand sqlCommand = new SqlCommand("SELECT * FROM " + table, _sqlConnection);
+            SqlCommand sqlCommand       = new SqlCommand("SELECT * FROM " + table, _sqlConnection);
             SqlDataReader sqlDataReader = sqlCommand.ExecuteReader();
-            List<DataBase> tempTable = new List<DataBase>();
+            List<DataBase> tempTable    = new List<DataBase>();
 
             while (sqlDataReader.Read()) // Read products table to List<class>
             {
@@ -332,9 +327,9 @@ namespace AvtoShop
 
             for (int i = 0; i < tempTable.Count; i++)
             {
-                if (tempTable[i]._zapchast == bd._zapchast &&
-                    tempTable[i]._mark == bd._mark &&
-                    tempTable[i]._izgotovitel == bd._izgotovitel)
+                if (tempTable[i]._zapchast      == bd._zapchast &&
+                    tempTable[i]._mark          == bd._mark &&
+                    tempTable[i]._izgotovitel   == bd._izgotovitel)
                 {
                     sqlDataReader.Close();
                     return tempTable[i];
@@ -344,6 +339,5 @@ namespace AvtoShop
             return null;
         }
 
-        private void toolStripButton1_Click(object sender, EventArgs e){}
     }
 }

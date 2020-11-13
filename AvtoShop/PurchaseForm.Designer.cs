@@ -129,7 +129,6 @@
             this.markBox3.Name = "markBox3";
             this.markBox3.Size = new System.Drawing.Size(197, 21);
             this.markBox3.TabIndex = 8;
-            this.markBox3.SelectedIndexChanged += new System.EventHandler(this.comboBox3_SelectedIndexChanged);
             // 
             // countTextBox1
             // 
@@ -168,7 +167,6 @@
             this.label6.Size = new System.Drawing.Size(100, 17);
             this.label6.TabIndex = 12;
             this.label6.Text = "Цена продажи:";
-            this.label6.Click += new System.EventHandler(this.label6_Click);
             // 
             // soldpriceTextBox
             // 
@@ -176,7 +174,6 @@
             this.soldpriceTextBox.Name = "soldpriceTextBox";
             this.soldpriceTextBox.Size = new System.Drawing.Size(197, 20);
             this.soldpriceTextBox.TabIndex = 13;
-            this.soldpriceTextBox.TextChanged += new System.EventHandler(this.soldpriceTextBox_TextChanged_1);
             this.soldpriceTextBox.KeyPress += new System.Windows.Forms.KeyPressEventHandler(this.soldpriceTextBox_KeyPress);
             // 
             // PurchaseForm

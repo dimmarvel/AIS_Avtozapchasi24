@@ -17,11 +17,12 @@ namespace AvtoShop
     public partial class SalesForm : Form
     {
 
-        private SqlConnection _sqlConnection = null;
-        private SqlCommand _sqlCommand = null;
-        private List<DataBase> _products = null;
-        private Storage storage = null;
-        private Basket basket = null;
+        private SqlConnection _sqlConnection    = null;
+        private List<DataBase> _products        = null;
+        private SqlCommand _sqlCommand          = null;
+        private Storage storage                 = null;
+        private Basket basket                   = null;
+
         public SalesForm()
         {
             InitializeComponent();
@@ -165,9 +166,9 @@ namespace AvtoShop
 
         private bool CheckExistenceTable(ref DataBase products, string table)
         {
-            SqlCommand sqlCommand = new SqlCommand("SELECT * FROM " + table, _sqlConnection);
+            SqlCommand sqlCommand       = new SqlCommand("SELECT * FROM " + table, _sqlConnection);
             SqlDataReader sqlDataReader = sqlCommand.ExecuteReader();
-            List<DataBase> tempTable = new List<DataBase>();
+            List<DataBase> tempTable    = new List<DataBase>();
 
             while (sqlDataReader.Read()) // Read products table to List<class>
             {
@@ -243,15 +244,15 @@ namespace AvtoShop
             priceLabel.Text = "";
             for (int i = 0; i < _products.Count; i++) // find price
             {
-                if(_products[i]._izgotovitel == izgotovitelBox2.Text && 
-                   _products[i]._zapchast == zapchastBox1.Text && 
-                   _products[i]._mark == markBox3.Text)
+                if(_products[i]._izgotovitel    == izgotovitelBox2.Text && 
+                   _products[i]._zapchast       == zapchastBox1.Text && 
+                   _products[i]._mark           == markBox3.Text)
                 {
                     if(countTextBox1.Text == "")
                         priceLabel.Text += "0$ (за 1 шт. = " +_products[i]._price_per_one + "$)";
                     else
                         priceLabel.Text += int.Parse(countTextBox1.Text) * _products[i]._price_per_one + "$ (за 1 шт. = "
-                            + _products[i]._price_per_one + "$)";
+                                + _products[i]._price_per_one + "$)";
                     break;
                 }
             }
@@ -278,10 +279,5 @@ namespace AvtoShop
                 basket = new Basket();
                 basket.Show();
         }
-
-        private void comboBox3_SelectedIndexChanged(object sender, EventArgs e){}
-        private void label6_Click(object sender, EventArgs e){}
-        private void soldpriceTextBox_TextChanged(object sender, EventArgs e){}
-
     }
 }

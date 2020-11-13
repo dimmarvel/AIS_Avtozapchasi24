@@ -128,7 +128,6 @@
             this.markBox3.Name = "markBox3";
             this.markBox3.Size = new System.Drawing.Size(197, 21);
             this.markBox3.TabIndex = 8;
-            this.markBox3.SelectedIndexChanged += new System.EventHandler(this.comboBox3_SelectedIndexChanged);
             // 
             // countTextBox1
             // 
