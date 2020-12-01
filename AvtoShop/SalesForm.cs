@@ -1,14 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.ComponentModel;
-using System.Data;
 using System.Data.SqlClient;
-using System.Drawing;
-using System.IO;
-using System.Linq;
-using System.Security.Policy;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows.Forms;
 
 namespace AvtoShop
@@ -32,7 +24,7 @@ namespace AvtoShop
         {
             try
             {
-                _sqlConnection = new SqlConnection($@"Data Source=(LocalDB)\MSSQLLocalDB;AttachDbFilename={Application.StartupPath}\Database1.mdf;Integrated Security=True");
+                _sqlConnection = new SqlConnection(Constants._connectStr);
                 _sqlConnection.Open(); //connect to database (load data from bd in datagrid view)
                 
                 ReadDataToClass();
@@ -278,6 +270,26 @@ namespace AvtoShop
         {
                 basket = new Basket();
                 basket.Show();
+        }
+
+        private void izgotovitelBox2_KeyPress(object sender, KeyPressEventArgs e)
+        {
+            e.Handled = true;
+        }
+
+        private void zapchastBox1_KeyPress(object sender, KeyPressEventArgs e)
+        {
+            e.Handled = true;
+        }
+
+        private void markBox3_SelectedIndexChanged(object sender, EventArgs e)
+        {
+
+        }
+
+        private void markBox3_KeyPress(object sender, KeyPressEventArgs e)
+        {
+            e.Handled = true;
         }
     }
 }

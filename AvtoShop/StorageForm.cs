@@ -19,8 +19,7 @@ namespace AvtoShop
 
         private void Form2_Load(object sender, EventArgs e)
         {
-
-            _sqlConnection = new SqlConnection($@"Data Source=(LocalDB)\MSSQLLocalDB;AttachDbFilename={Application.StartupPath}\Database1.mdf;Integrated Security=True");
+            _sqlConnection = new SqlConnection(Constants._connectStr);
             _sqlConnection.Open(); //connect to database (load data from bd in datagrid view)
             LoadData();
         }
@@ -57,6 +56,11 @@ namespace AvtoShop
         private void button2_Click(object sender, EventArgs e)
         {
             (dataGridView1.DataSource as DataTable).DefaultView.RowFilter = string.Empty;
+        }
+
+        private void comboBox1_KeyPress(object sender, KeyPressEventArgs e)
+        {
+            e.Handled = true;
         }
     }
 }

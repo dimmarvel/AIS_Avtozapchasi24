@@ -20,32 +20,67 @@ namespace AvtoShop
 
         private void PurchaseButton_Click(object sender, EventArgs e)
         {
-            _purchaseForm = new PurchaseForm();
-            _purchaseForm.Show();
+            try
+            {
+                _purchaseForm = new PurchaseForm();
+                _purchaseForm.Show();
+            }
+            catch (Exception)
+            {
+                throw;
+            }
         }
 
         private void StorageButton_Click(object sender, EventArgs e)
         {
-            _storageForm = new StorageForm();
-            _storageForm.Show();
-        }
+            try
+            {
+                _storageForm = new StorageForm();
+                _storageForm.Show();
+            }
+            catch (Exception)
+            {
+                throw;
+            }
+}
 
         private void ProductsButton_Click(object sender, EventArgs e)
         {
-            _productsForm = new ProductsForm();
-            _productsForm.Show();
+            try
+            {
+                _productsForm = new ProductsForm();
+                _productsForm.Show();
+            }
+            catch (Exception)
+            {
+                throw;
+            }
         }
 
         private void SalesStatisticsButton_Click(object sender, EventArgs e)
         {
-            _salesStatForm = new SalesStatisticsForm();
-            _salesStatForm.Show();
+            try
+            {
+                _salesStatForm = new SalesStatisticsForm();
+                _salesStatForm.Show();
+            }
+            catch (Exception)
+            {
+                throw;
+            }
         }
 
         private void SalesButton_Click(object sender, EventArgs e)
         {
-            _salesForm = new SalesForm();
-            _salesForm.Show();
+            try
+            {
+                _salesForm = new SalesForm();
+                _salesForm.Show();
+            }
+            catch (Exception)
+            {
+                throw;
+            }
         }
     }
 }

@@ -23,7 +23,7 @@ namespace AvtoShop
             try
             {
                 // SELECT(выбрать все сущности из таблицы) остальное для управления по таблице
-                _sqlDataAdapter = new SqlDataAdapter("SELECT *, 'Delete' AS [Command] FROM Products",_sqlConnection);
+                _sqlDataAdapter = new SqlDataAdapter("SELECT *, 'Delete' AS [Команда] FROM Products",_sqlConnection);
                 _sqlBuilder     = new SqlCommandBuilder(_sqlDataAdapter); //init
 
                 _sqlBuilder.GetInsertCommand(); //generate command for insert update and delete
@@ -68,9 +68,10 @@ namespace AvtoShop
                 MessageBox.Show("Error" + ex.Message, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
         }
+
         private void ProductsForm_Load(object sender, EventArgs e)
         {
-            _sqlConnection = new SqlConnection($@"Data Source=(LocalDB)\MSSQLLocalDB;AttachDbFilename={Application.StartupPath}\Database1.mdf;Integrated Security=True");
+            _sqlConnection = new SqlConnection(Constants._connectStr);
             _sqlConnection.Open(); //connect to database (load data from bd in datagrid view)
             LoadData();
         }
@@ -154,7 +155,7 @@ namespace AvtoShop
                     DataGridViewRow row             = dataGridView1.Rows[lastRow];
                     DataGridViewLinkCell linkCell   = new DataGridViewLinkCell();
                     dataGridView1[6, lastRow]       = linkCell;
-                    row.Cells["Command"].Value      = "Insert";
+                    row.Cells["Команда"].Value      = "Insert";
                 }
             }
             catch (Exception ex)
@@ -173,7 +174,7 @@ namespace AvtoShop
                     DataGridViewRow editingRow          = dataGridView1.Rows[rowIndex];
                     DataGridViewLinkCell linkCell       = new DataGridViewLinkCell();
                     dataGridView1[6, rowIndex]          = linkCell;
-                    editingRow.Cells["Command"].Value   = "Update";
+                    editingRow.Cells["Команда"].Value   = "Update";
                 }
             }
             catch (Exception ex)
@@ -213,7 +214,7 @@ namespace AvtoShop
                 "1) Справа есть комманды они делятся на Insert, Delete и Update.\n" +
                 "2) По умолчанию стоит комманда Delete, если нажать на команду напротив строки то она удалится.\n" +
                 "3) При попытке изменить форму команда Delete заменяется на команду Update при нажатии на неё сохрянятся измененные вами данные в строке в базу данных.\n" +
-                "4) При попытке добавить новую запись в пустые строки, напротив записи которую вы хотите добавить появится кнопка Update, после нажатия на которую в базу данных добавится введенная вами строка.";
+                "4) При попытке добавить новую запись в пустые строки, напротив записи которую вы хотите добавить появится кнопка Insert, после нажатия на которую в базу данных добавится введенная вами строка.";
             MessageBox.Show(info, "Информация о форме", MessageBoxButtons.OK, MessageBoxIcon.Information);
         }
     }

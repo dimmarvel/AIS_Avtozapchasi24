@@ -19,10 +19,11 @@ namespace AvtoShop
 
         private void Storage_Load(object sender, EventArgs e)
         {
-            _sqlConnection = new SqlConnection($@"Data Source=(LocalDB)\MSSQLLocalDB;AttachDbFilename={Application.StartupPath}\Database1.mdf;Integrated Security=True");
+            _sqlConnection = new SqlConnection(Constants._connectStr);
             _sqlConnection.Open(); //connect to database (load data from bd in datagrid view)
             LoadData();
         }
+
         private void LoadData()
         {
             try

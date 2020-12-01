@@ -111,6 +111,7 @@
             this.zapchastBox1.Size = new System.Drawing.Size(197, 21);
             this.zapchastBox1.TabIndex = 6;
             this.zapchastBox1.SelectedIndexChanged += new System.EventHandler(this.comboBox1_SelectedIndexChanged);
+            this.zapchastBox1.KeyPress += new System.Windows.Forms.KeyPressEventHandler(this.zapchastBox1_KeyPress);
             // 
             // izgotovitelBox2
             // 
@@ -120,6 +121,7 @@
             this.izgotovitelBox2.Size = new System.Drawing.Size(197, 21);
             this.izgotovitelBox2.TabIndex = 7;
             this.izgotovitelBox2.SelectedIndexChanged += new System.EventHandler(this.comboBox2_SelectedIndexChanged);
+            this.izgotovitelBox2.KeyPress += new System.Windows.Forms.KeyPressEventHandler(this.izgotovitelBox2_KeyPress);
             // 
             // markBox3
             // 
@@ -128,6 +130,8 @@
             this.markBox3.Name = "markBox3";
             this.markBox3.Size = new System.Drawing.Size(197, 21);
             this.markBox3.TabIndex = 8;
+            this.markBox3.SelectedIndexChanged += new System.EventHandler(this.markBox3_SelectedIndexChanged);
+            this.markBox3.KeyPress += new System.Windows.Forms.KeyPressEventHandler(this.markBox3_KeyPress);
             // 
             // countTextBox1
             // 

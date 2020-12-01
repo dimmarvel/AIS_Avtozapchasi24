@@ -62,6 +62,7 @@
             this.comboBox1.Size = new System.Drawing.Size(130, 21);
             this.comboBox1.TabIndex = 2;
             this.comboBox1.Text = "Запчасть";
+            this.comboBox1.KeyPress += new System.Windows.Forms.KeyPressEventHandler(this.comboBox1_KeyPress);
             // 
             // dataGridView1
             // 

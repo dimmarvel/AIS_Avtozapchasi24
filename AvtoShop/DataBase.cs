@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
+
 namespace AvtoShop
 {
     public class DataBase
@@ -24,5 +25,9 @@ namespace AvtoShop
             _price_per_one  = price;
             _count          = count;
         }
+    }
+    static class Constants
+    {
+        public static string _connectStr = $@"Data Source=(LocalDB)\MSSQLLocalDB;AttachDbFilename=C:\Users\dimma\Desktop\AvtoShop\AvtoShop\Database1.mdf;Integrated Security=True";
     }
 }

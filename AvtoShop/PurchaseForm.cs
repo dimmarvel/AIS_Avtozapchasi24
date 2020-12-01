@@ -21,7 +21,7 @@ namespace AvtoShop
         {
             try
             {
-                _sqlConnection = new SqlConnection($@"Data Source=(LocalDB)\MSSQLLocalDB;AttachDbFilename={Application.StartupPath}\Database1.mdf;Integrated Security=True");
+                _sqlConnection = new SqlConnection(Constants._connectStr);
                 _sqlConnection.Open(); //connect to database (load data from bd in datagrid view)
 
                 _buyTable = new List<DataBase>();
@@ -260,6 +260,31 @@ namespace AvtoShop
                     MessageBoxButtons.OK, MessageBoxIcon.Error);
                 countTextBox1.Text = "1";
             }
+        }
+
+        private void izgotovitelBox2_KeyPress(object sender, KeyPressEventArgs e)
+        {
+            e.Handled = true;
+        }
+
+        private void zapchastBox1_KeyPress(object sender, KeyPressEventArgs e)
+        {
+            e.Handled = true;
+        }
+
+        private void markBox3_SelectedIndexChanged(object sender, EventArgs e)
+        {
+
+        }
+
+        private void markBox3_KeyPress(object sender, KeyPressEventArgs e)
+        {
+            e.Handled = true;
+        }
+
+        private void PurchaseForm_FormClosed(object sender, FormClosedEventArgs e)
+        {
+            _sqlConnection.Close();
         }
     }
 }

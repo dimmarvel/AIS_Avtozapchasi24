@@ -2,6 +2,8 @@
 using System.Collections.Generic;
 using System.Data;
 using System.Data.SqlClient;
+using System.IO;
+using System.Text;
 using System.Windows.Forms;
 
 namespace AvtoShop
@@ -23,7 +25,7 @@ namespace AvtoShop
 
         private void Basket_Load(object sender, EventArgs e)
         {
-            _sqlConnection = new SqlConnection($@"Data Source=(LocalDB)\MSSQLLocalDB;AttachDbFilename={Application.StartupPath}\Database1.mdf;Integrated Security=True");
+            _sqlConnection = new SqlConnection(Constants._connectStr);
             _sqlConnection.Open(); //connect to database (load data from bd in datagrid view)
             LoadData();
             RecalcPrice();
@@ -184,7 +186,7 @@ namespace AvtoShop
         {
             e.Control.KeyPress -= new KeyPressEventHandler(Column_KeyPress);
 
-            if (dataGridView1.CurrentCell.ColumnIndex == 5)
+            if (dataGridView1.CurrentCell.ColumnIndex == 6)
             {
                 TextBox textBox = e.Control as TextBox;
 
@@ -218,6 +220,29 @@ namespace AvtoShop
             sqlDataReader.Close();
         }
 
+        void create_check()
+        {
+            int counter = 0;
+            double sum = 0;
+            var builder = new StringBuilder();
+
+            builder.AppendLine($"{"".PadRight(25, ' ')}ОАО Автозапчасти");
+            foreach (var product in _basket)
+            {
+                counter++;
+                int sum_zapchast_price = product._price_per_one * product._count;
+                sum += sum_zapchast_price;
+                builder.AppendLine($"{counter}.{product._zapchast} x{product._count}");
+                builder.AppendLine($"  Код:{product._id}");
+                builder.AppendLine($"  Стоимость{"".PadRight(40 - sum_zapchast_price.ToString().Length, '.')}{sum_zapchast_price}");
+            }
+            builder.AppendLine("".PadRight(51, '='));
+            builder.AppendLine($"Всего{"".PadRight(46 - sum.ToString().Length, '.')}{sum}");
+            builder.AppendLine($"Дата и время: {"".PadRight(46 - DateTime.Now.ToString().Length, '.')}{DateTime.Now}");
+            builder.AppendLine($"Итог{"".PadRight(47 - sum.ToString().Length, ' ')}{sum}");
+            File.WriteAllText("cheque.txt", builder.ToString());
+        }
+
         private void button2_Click(object sender, EventArgs e)
         {
             if(CheckingBasket() == false) return;
@@ -227,21 +252,30 @@ namespace AvtoShop
             try
             {
                 ReadDataToList("SELECT * FROM Basket",ref _basket);
-                string queryDB = "";
+                string queryProducts = "";
 
                 for (int i = 0; i < _basket.Count; i++)
                 {
-                    DataBase bd = null;
-                    if ((bd = CheckExistenceTable(_basket[i], "Products")) != null)
+                    DataBase bd_products = null;
+                    if ((bd_products = CheckExistenceTable(_basket[i], "Products")) != null)
                     {
-                        if (bd._count == _basket[i]._count)
-                            queryDB = "DELETE Products " + "WHERE Id = " + bd._id + ";";
-                        else if (bd._count > _basket[i]._count)
-                            queryDB = "UPDATE Products SET " + "Количество = '" +
-                                      (bd._count - _basket[i]._count) + "' WHERE Id = " + bd._id + ";";
+                        if (bd_products._count == _basket[i]._count)
+                            queryProducts = "DELETE Products " + "WHERE Id = " + bd_products._id + ";";
+                        else if (bd_products._count > _basket[i]._count)
+                            queryProducts = "UPDATE Products SET " + "Количество = '" +
+                                      (bd_products._count - _basket[i]._count) + "' WHERE Id = " + bd_products._id + ";";
 
-                        ExecuteAnyQuery(queryDB, _sqlConnection);
-                        ReadDataToList("SELECT * FROM Basket",ref _basket);
+                        string queryStat = "INSERT INTO SoldStat (Запчасть, Марка, Изготовитель, Цена, Продано_шт, Дата_Продажи)" + " VALUES(N'" +
+                                    _basket[i]._zapchast + "', N'" +
+                                    _basket[i]._mark + "', N'" +
+                                    _basket[i]._izgotovitel + "', '" +
+                                    _basket[i]._price_per_one + "', '" +
+                                    _basket[i]._count + "', '" +
+                                    DateTime.Now + "');";
+                        create_check();
+                        ExecuteAnyQuery(queryProducts, _sqlConnection);
+                        ExecuteAnyQuery(queryStat, _sqlConnection);
+                        ReadDataToList("SELECT * FROM Basket", ref _basket);
                     }
                 }
 
@@ -283,7 +317,7 @@ namespace AvtoShop
 
         private bool CheckingBasket() //Checking the correctness of the basket
         {
-            ReadDataToList("SELECT * FROM Basket",ref _basket);
+            ReadDataToList("SELECT * FROM Basket", ref _basket);
 
             for (int i = 0; i < _basket.Count; i++)
             {
@@ -339,5 +373,9 @@ namespace AvtoShop
             return null;
         }
 
+        private void button3_Click(object sender, EventArgs e)
+        {
+            ExecuteAnyQuery("DELETE FROM Basket", _sqlConnection); //clear basket
+        }
     }
 }
