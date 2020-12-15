@@ -1,12 +1,6 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel;
 using System.Data;
 using System.Data.SqlClient;
-using System.Drawing;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows.Forms;
 
 namespace AvtoShop
@@ -44,19 +38,39 @@ namespace AvtoShop
         {
             try
             {
-                string query = "SELECT * FROM SoldStat " + "WHERE [Дата_продажи] BETWEEN N'"
-                           + dateTimePicker1.Text + "' AND N'" + dateTimePicker2.Text + "'";
+                string query = "SELECT * FROM SoldStat WHERE [Дата_продажи] BETWEEN @StartDate and @EndDate";
                 _sqlCommand = new SqlCommand(query, _sqlConnection);
-                SqlDataReader dr = _sqlCommand.ExecuteReader();
-                DataTable dt = new DataTable();
+                _sqlCommand.Parameters.AddWithValue("@StartDate", dateTimePicker1.Value);
+                _sqlCommand.Parameters.AddWithValue("@EndDate", dateTimePicker2.Value);
 
-                dt.Load(dr);
-                dataGridView1.DataSource = dt;
+                //_sqlCommand.ExecuteNonQuery();
+
+                _sqlDataAdapter = new SqlDataAdapter(_sqlCommand);
+                _sqlBuilder     = new SqlCommandBuilder(_sqlDataAdapter); //init
+                _dataSet        = new DataSet(); //init
+
+                _sqlDataAdapter.Fill(_dataSet, "SoldStat"); // заполнение
+                dataGridView1.DataSource = _dataSet.Tables["SoldStat"];
+
                 MessageBox.Show("Таблица успешно обновлена!", "Успех", MessageBoxButtons.OK, MessageBoxIcon.Information);
             }
             catch (Exception ex)
             {
                 MessageBox.Show(ex.Message, "Error!", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
+        }
+
+        private void ReloadData()
+        {
+            try
+            {
+                _dataSet.Tables["SoldStat"].Clear();
+                _sqlDataAdapter.Fill(_dataSet, "SoldStat");
+                dataGridView1.DataSource = _dataSet.Tables["SoldStat"];
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show("Error" + ex.Message, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
         }
 
@@ -77,6 +91,16 @@ namespace AvtoShop
             {
                 MessageBox.Show(ex.Message, "Error!", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
+        }
+
+        private void button2_Click(object sender, EventArgs e)
+        {
+            ReloadData();
+        }
+
+        private void button2_Click_1(object sender, EventArgs e)
+        {
+            LoadData();
         }
     }
 }

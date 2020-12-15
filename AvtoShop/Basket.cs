@@ -220,7 +220,7 @@ namespace AvtoShop
             sqlDataReader.Close();
         }
 
-        void create_check()
+        StringBuilder create_check()
         {
             int counter = 0;
             double sum = 0;
@@ -236,11 +236,12 @@ namespace AvtoShop
                 builder.AppendLine($"  Код:{product._id}");
                 builder.AppendLine($"  Стоимость{"".PadRight(40 - sum_zapchast_price.ToString().Length, '.')}{sum_zapchast_price}");
             }
-            builder.AppendLine("".PadRight(51, '='));
+            builder.AppendLine("".PadRight(30, '='));
             builder.AppendLine($"Всего{"".PadRight(46 - sum.ToString().Length, '.')}{sum}");
             builder.AppendLine($"Дата и время: {"".PadRight(46 - DateTime.Now.ToString().Length, '.')}{DateTime.Now}");
             builder.AppendLine($"Итог{"".PadRight(47 - sum.ToString().Length, ' ')}{sum}");
             File.WriteAllText("cheque.txt", builder.ToString());
+            return builder;
         }
 
         private void button2_Click(object sender, EventArgs e)
@@ -265,17 +266,23 @@ namespace AvtoShop
                             queryProducts = "UPDATE Products SET " + "Количество = '" +
                                       (bd_products._count - _basket[i]._count) + "' WHERE Id = " + bd_products._id + ";";
 
-                        string queryStat = "INSERT INTO SoldStat (Запчасть, Марка, Изготовитель, Цена, Продано_шт, Дата_Продажи)" + " VALUES(N'" +
-                                    _basket[i]._zapchast + "', N'" +
-                                    _basket[i]._mark + "', N'" +
-                                    _basket[i]._izgotovitel + "', '" +
-                                    _basket[i]._price_per_one + "', '" +
-                                    _basket[i]._count + "', '" +
-                                    DateTime.Now + "');";
-                        create_check();
+                        string queryStat = "INSERT INTO SoldStat (Запчасть, Марка, Изготовитель, Цена, Продано_шт, Дата_Продажи) " +
+                            "VALUES(@zapchast, @mark, @izgotov, @price, @sold, @date_sold)";
+
+                        SqlCommand command = new SqlCommand(queryStat, _sqlConnection);
+                        command.Parameters.AddWithValue("@zapchast", _basket[i]._zapchast);
+                        command.Parameters.AddWithValue("@mark", _basket[i]._mark);
+                        command.Parameters.AddWithValue("@izgotov", _basket[i]._izgotovitel);
+                        command.Parameters.AddWithValue("@price", _basket[i]._price_per_one);
+                        command.Parameters.AddWithValue("@sold", _basket[i]._count);
+                        command.Parameters.AddWithValue("@date_sold", DateTime.Now);
+
+                        StringBuilder builderCheck = create_check();
                         ExecuteAnyQuery(queryProducts, _sqlConnection);
-                        ExecuteAnyQuery(queryStat, _sqlConnection);
+                        command.ExecuteNonQuery();
+
                         ReadDataToList("SELECT * FROM Basket", ref _basket);
+                        MessageBox.Show(builderCheck.ToString(), "Чек", MessageBoxButtons.OK, MessageBoxIcon.Information);
                     }
                 }
 

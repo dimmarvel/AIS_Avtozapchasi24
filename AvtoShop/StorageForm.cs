@@ -26,11 +26,11 @@ namespace AvtoShop
 
         private void button1_Click(object sender, EventArgs e)
         {
-            string send = "SELECT * FROM Products " + "WHERE " + comboBox1.Text + " = '" + textBox1.Text + "'";
+            //string send = "SELECT * FROM Products " + "WHERE " + comboBox1.Text + " = '" + textBox1.Text + "'";
             
-            MessageBox.Show(send);
-            (dataGridView1.DataSource as DataTable).DefaultView.RowFilter = 
-                            string.Format($"{comboBox1.Text} = '{textBox1.Text}'");
+            //MessageBox.Show(send); //DEBUG MESSAGE
+
+            (dataGridView1.DataSource as DataTable).DefaultView.RowFilter = string.Format($"{comboBox1.Text} = '{textBox1.Text}'");
             MessageBox.Show("Поиск успешно выполнен!", "Успех", MessageBoxButtons.OK, MessageBoxIcon.Information);
         }
 
